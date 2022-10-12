@@ -9,7 +9,7 @@ import { ProductDetail } from '../screens/ProducDetail';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
-export function StackRoutes() {
+export function AppStackRoutes() {
   return (
     <Navigator
       initialRouteName="Dashboard"

@@ -12,7 +12,8 @@ import {
 } from '@expo-google-fonts/poppins';
 import { AuthProvider } from './src/hooks/auth';
 import { Routes } from './src/routes';
-import { StackRoutes } from './src/routes/stack.routes';
+import { AppStackRoutes } from './src/routes/app.stack.routes';
+import { AppTabRoutes } from './src/routes/app.tab.routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -29,7 +30,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
-          <StackRoutes />
+          <AppTabRoutes />
         </NavigationContainer>
       </GestureHandlerRootView>
     </ThemeProvider>
