@@ -1,49 +1,59 @@
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { TextInputMask } from 'react-native-masked-text';
 
 export const Container = styled.View`
-  flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Header = styled.View`
-  background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
-  height: 70%;
-  justify-content: flex-end;
+  height: ${RFValue(300)}px;
+  background-color: ${({ theme }) => theme.colors.primary};
   align-items: center;
-`;
-
-export const TitleWraprer = styled.View`
-  align-items: center;
+  justify-content: center;
 `;
 
 export const Title = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.medium};
-  color: ${({ theme }) => theme.colors.shape};
-  font-size: ${RFValue(30)}px;
-
-  text-align: center;
-  margin-top: 45px;
-`;
-
-export const SignInTitle = styled.Text`
+  padding-top: 30px;
   font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.shape};
-  font-size: ${RFValue(16)}px;
-
   text-align: center;
-  margin-top: 80px;
-  margin-bottom: 67px;
 `;
 
-export const Footer = styled.View`
-  background-color: ${({ theme }) => theme.colors.secondary};
+export const ScrollViewProducts = styled.ScrollView``;
+
+export const Form = styled.View`
   width: 100%;
-  height: 30%;
-`;
-
-export const FooterWrapper = styled.View`
-  margin-top: ${RFValue(-4)}px;
-  padding: 0 32px;
+  padding: 24px;
   justify-content: space-between;
 `;
+
+export const Input = styled.TextInput`
+  margin-top: 10px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(14)}px;
+  width: 100%;
+  height: ${RFValue(50)}px;
+  background-color: ${({ theme }) => theme.colors.shape};
+  border-radius: 5px;
+  color: ${({ theme }) => theme.colors.text_dark};
+  padding: 3px 10px 3px 10px;
+  margin-bottom: 5px;
+`;
+
+export const TextInputMasked = styled(TextInputMask)`
+  margin-top: 10px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(14)}px;
+  width: 100%;
+  height: ${RFValue(50)}px;
+  background-color: ${({ theme }) => theme.colors.shape};
+  border-radius: 5px;
+  color: ${({ theme }) => theme.colors.text_dark};
+  padding: 3px 10px 3px 10px;
+  margin-bottom: 5px;
+`;
+
+export const ContainerForm = styled.ScrollView``;

@@ -1,21 +1,37 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Button } from '../../components/Button';
+
 import {
   Container,
-  Footer,
-  FooterWrapper,
+  ContainerForm,
+  Form,
   Header,
-  SignInTitle,
+  Input,
+  TextInputMasked,
   Title,
-  TitleWraprer,
 } from './styles';
-import AppleSvg from '../../assets/apple.svg';
-import GoogleSvg from '../../assets/google.svg';
-import LogoSvg from '../../assets/logo.png';
+
+import { api } from '../../services/api';
+import { useNavigation } from '@react-navigation/core';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
-import { ActivityIndicator, Alert, Platform } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { SignInSocialButton } from '../../components/SignInSocialButton';
+import GoogleSvg from '../../assets/google.svg';
+
+interface FormData {
+  name: string;
+  phone: string;
+  email: string;
+  cpf: string;
+  password: string;
+  birthday: Date;
+}
 
 export function SignIn() {
   const theme = useTheme();
@@ -33,53 +49,22 @@ export function SignIn() {
     }
   }
 
-  async function handleSignInWithApple() {
-    try {
-      setIsLoading(true);
-      return await signInWithApple();
-    } catch (error) {
-      console.log(error);
-      Alert.alert('Não foi possível conectar a conta Apple');
-      setIsLoading(false);
-    }
-  }
-
   return (
-    <Container>
-      <Header>
-        <TitleWraprer>
-          <LogoSvg width={RFValue(120)} height={RFValue(68)} />
+    <KeyboardAvoidingView behavior="height" enabled>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <Header>
+            <Title>Faça o seu cadastro ou entre com sua conta Google</Title>
+          </Header>
 
-          <Title>Baobá Brasil Ervas</Title>
-        </TitleWraprer>
-
-        <SignInTitle>Faça o login com uma das contas abaixo</SignInTitle>
-      </Header>
-
-      <Footer>
-        <FooterWrapper>
-          <SignInSocialButton
-            title="Entrar com Google"
-            svg={GoogleSvg}
-            onPress={handleSignInWithGoogle}
-          />
-
-          {Platform.OS === 'ios' && (
+          <Form>
             <SignInSocialButton
-              title="Entrar com Apple"
-              svg={AppleSvg}
-              onPress={handleSignInWithApple}
+              title="Entrar com a Google"
+              onPress={handleSignInWithGoogle}
             />
-          )}
-        </FooterWrapper>
-        {isLoading && (
-          <ActivityIndicator
-            color={theme.colors.secondary_light}
-            size="large"
-            style={{ marginTop: 18 }}
-          />
-        )}
-      </Footer>
-    </Container>
+          </Form>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

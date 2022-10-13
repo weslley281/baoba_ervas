@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppStackRoutes } from './app.stack.routes';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
+import { SignIn } from '../screens/SignIn';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -46,6 +47,16 @@ export function AppTabRoutes() {
       <Screen
         name="Registro"
         component={Register}
+        options={{
+          tabBarIcon: () => (
+            <Feather name="users" size={24} color={theme.colors.primary} />
+          ),
+        }}
+      />
+
+      <Screen
+        name="SignIn"
+        component={SignIn}
         options={{
           tabBarIcon: () => (
             <Feather name="users" size={24} color={theme.colors.primary} />

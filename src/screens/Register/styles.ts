@@ -20,17 +20,6 @@ export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.shape};
 `;
 
-export const ContainerPrint = styled.View`
-  width: 100%;
-  height: 80px;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const ButtonPrint = styled.Button`
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
 export const ScrollViewProducts = styled.ScrollView``;
 
 export const Form = styled.View`
