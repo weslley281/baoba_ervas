@@ -3,7 +3,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export const Container = styled(GestureHandlerRootView)`
   flex: 1;
@@ -34,7 +34,7 @@ export const Category = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export const Icon = styled(Feather)`
+export const Icon = styled(FontAwesome5)`
   font-size: ${RFValue(20)}px;
   margin-right: 16px;
 `;

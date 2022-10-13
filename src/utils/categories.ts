@@ -2,56 +2,56 @@ export const categories = [
   {
     key: 'condimentos',
     name: 'Condimentos',
-    icon: 'aperture',
+    icon: 'prescription-bottle',
   },
   {
     key: 'doces',
     name: 'Doces',
-    icon: 'aperture',
+    icon: 'cookie-bite',
   },
   {
     key: 'farinaceos',
     name: 'Farináceos',
-    icon: 'aperture',
+    icon: 'filter',
   },
   {
     key: 'chas',
     name: 'Chás',
-    icon: 'aperture',
+    icon: 'mug-hot',
   },
   {
     key: 'encapsulados',
     name: 'Encapsulados',
-    icon: 'aperture',
+    icon: 'capsules',
   },
   {
     key: 'sementes',
     name: 'Sementes',
-    icon: 'aperture',
+    icon: 'seedling',
   },
   {
     key: 'graos',
     name: 'Grãos',
-    icon: 'aperture',
+    icon: 'box',
   },
   {
     key: 'suplementos',
     name: 'Suplementos',
-    icon: 'aperture',
+    icon: 'blender',
   },
   {
     key: 'frutas secas',
     name: 'Frutas secas',
-    icon: 'aperture',
+    icon: 'carrot',
   },
   {
     key: 'petiscos',
     name: 'Petiscos',
-    icon: 'aperture',
+    icon: 'concierge-bell',
   },
   {
     key: 'todos',
     name: 'Todos',
-    icon: 'aperture',
+    icon: 'box',
   },
 ];

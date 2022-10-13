@@ -31,47 +31,16 @@ export const Form = styled.View`
   justify-content: space-between;
 `;
 
-export const Input = styled.TextInput`
-  margin-top: 10px;
-  font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: ${RFValue(14)}px;
+export const ContainerLogo = styled.View`
   width: 100%;
-  height: ${RFValue(50)}px;
-  background-color: ${({ theme }) => theme.colors.shape};
-  border-radius: 5px;
-  color: ${({ theme }) => theme.colors.text_dark};
-  padding: 3px 10px 3px 10px;
-  margin-bottom: 5px;
-`;
-
-export const TextInputMasked = styled(TextInputMask)`
-  margin-top: 10px;
-  font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: ${RFValue(14)}px;
-  width: 100%;
-  height: ${RFValue(50)}px;
-  background-color: ${({ theme }) => theme.colors.shape};
-  border-radius: 5px;
-  color: ${({ theme }) => theme.colors.text_dark};
-  padding: 3px 10px 3px 10px;
-  margin-bottom: 5px;
-`;
-
-export const ContainerForm = styled.ScrollView``;
-
-export const SignInSocialButton = styled(RectButton)`
-  height: ${RFValue(56)}px;
-  background-color: ${({ theme }) => theme.colors.shape};
-  border-radius: 5px;
+  height: ${RFValue(150)}px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  padding-top: 40px;
 `;
 
-export const TitleButton = styled.Text`
-  padding-top: 30px;
-  font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: ${RFValue(20)}px;
-  color: ${({ theme }) => theme.colors.text_dark};
-  text-align: center;
+export const Logo = styled.Image`
+  width: ${RFValue(250)}px;
+  height: ${RFValue(50)}px;
+  border-radius: 10px;
 `;

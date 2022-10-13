@@ -1,30 +1,17 @@
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Button } from '../../components/Button';
-
-import {
-  Container,
-  ContainerForm,
-  Form,
-  Header,
-  Input,
-  SignInSocialButton,
-  TextInputMasked,
-  Title,
-  TitleButton,
-} from './styles';
-
-import { api } from '../../services/api';
-import { useNavigation } from '@react-navigation/core';
+import { Container, ContainerLogo, Form, Header, Logo, Title } from './styles';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
-
-import GoogleSvg from '../../assets/google.svg';
+import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 interface FormData {
   name: string;
@@ -56,19 +43,27 @@ export function SignIn() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
           <Header>
+            <ContainerLogo>
+              <Logo source={require('../../images/logo_baoba.png')} />
+            </ContainerLogo>
             <Title>Faça o seu cadastro ou entre com sua conta Google</Title>
           </Header>
 
           <Form>
-            <SignInSocialButton onPress={handleSignInWithGoogle}>
-              <TitleButton>Entrar com a Google</TitleButton>
-            </SignInSocialButton>
+            <AntDesign name="google" size={24} color="black" />
             <Button
               title="Entrar com a Google"
               onPress={handleSignInWithGoogle}
               color={theme.colors.shape}
             />
           </Form>
+          {isLoading && (
+            <ActivityIndicator
+              color={theme.colors.primary_light}
+              size="large"
+              style={{ marginTop: 18 }}
+            />
+          )}
         </Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
