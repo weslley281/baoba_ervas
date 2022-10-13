@@ -54,7 +54,7 @@ export function AppTabRoutes() {
         }}
       />
 
-      <Screen
+      {/* <Screen
         name="SignIn"
         component={SignIn}
         options={{
@@ -62,7 +62,7 @@ export function AppTabRoutes() {
             <Feather name="users" size={24} color={theme.colors.primary} />
           ),
         }}
-      />
+      /> */}
     </Navigator>
   );
 }
