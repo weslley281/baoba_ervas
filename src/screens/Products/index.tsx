@@ -103,7 +103,7 @@ export function Products() {
         />
         <Input
           placeholder="Pesquise pelo nome"
-          onChangeText={(text) => setSearchText(text)}
+          onChangeText={(text: string) => setSearchText(text)}
         />
       </Form>
       {searchText === '' && category.key === 'todos' ? (

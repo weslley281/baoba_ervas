@@ -34,7 +34,6 @@ export function Register() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [sucess, setSucess] = useState(false);
   const { navigate, goBack } = useNavigation<any>();
 
   async function handleRegister() {
@@ -74,8 +73,6 @@ export function Register() {
       return;
     }
 
-    setSucess(true);
-
     const obj = {
       name: name,
       phone: phone,
@@ -83,18 +80,35 @@ export function Register() {
       email: email,
     };
 
-    try {
-      await api.post('clients/insert_client.php', obj);
-      setName('');
-      setPhone('');
-      setDate('');
-      setEmail('');
-    } catch (error) {
-      Alert.alert('Ops', 'Alguma coisa deu errado, tente novamente.');
-      // console.log(obj);
-      console.log(error);
-      setSucess(false);
+    const searsh_email = await api.get(
+      `clients/searsh_cliente_email.php?email=${email}`
+    );
+    if (searsh_email.data.success == true) {
+      Alert.alert('Alerta', 'Email já Cadastrado');
+      return;
     }
+
+    const searsh_phone = await api.get(
+      `clients/searsh_cliente_phone.php?phone=${phone}`
+    );
+    if (searsh_phone.data.success == true) {
+      Alert.alert('Alerta', 'Telefone já Cadastrado');
+      return;
+    }
+
+    await api
+      .post('clients/insert_client.php', obj)
+      .then(() => {
+        setTimeout(() => {
+          navigate('Home');
+          Alert.alert('Alerta', 'Salvo com sucesso');
+        }, 1500);
+      })
+      .catch((error) => Alert.alert('Erro', error));
+    setName('');
+    setPhone('');
+    setDate('');
+    setEmail('');
   }
 
   return (
@@ -112,7 +126,7 @@ export function Register() {
                 name="name"
                 placeholder="Nome Completo"
                 value={name}
-                onChangeText={(text) => setName(text)}
+                onChangeText={(text: string) => setName(text)}
               />
 
               <TextInputMasked
@@ -143,22 +157,16 @@ export function Register() {
                 autoComplete="email"
                 name="email"
                 placeholder="Email"
+                autoCapitalize="none"
                 value={email}
-                onChangeText={(text) => setEmail(text)}
+                onChangeText={(text: string) => setEmail(text)}
               />
 
               <Button
                 title="Enviar"
                 light
                 onPress={() => {
-                  setSucess(true);
-                  handleRegister().then(() => {
-                    setTimeout(() => {
-                      setSucess(false);
-                      navigate('DashBoard');
-                      Alert.alert('Salvo com sucesso');
-                    }, 1500);
-                  });
+                  handleRegister();
                 }}
               />
             </Form>

@@ -10,7 +10,7 @@ import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const REDIRECT_URI = 'https://auth.expo.io/@weslley.ferraz/gofinances';
+const REDIRECT_URI = 'https://auth.expo.io/@weslley.ferraz/baobaervas';
 const { CLIENT_ID } = process.env;
 
 interface AuthProviderProps {
@@ -45,7 +45,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
   const [userStorageLoading, setUserStorageLoading] = useState(true);
 
-  const userStorageKey = '@gofinances:user';
+  const userStorageKey = '@baobaervas:user';
 
   async function signInWithGoogle() {
     try {
@@ -132,19 +132,19 @@ function AuthProvider({ children }: AuthProviderProps) {
     loadUserStorageData();
   }, []);
 
-  // return (
-  //   <AuthContext.Provider
-  //     value={{
-  //       user,
-  //       signInWithGoogle,
-  //       signInWithApple,
-  //       signOut,
-  //       userStorageLoading,
-  //     }}
-  //   >
-  //     {children}
-  //   </AuthContext.Provider>
-  // );
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        signInWithGoogle,
+        signInWithApple,
+        signOut,
+        userStorageLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 function useAuth() {

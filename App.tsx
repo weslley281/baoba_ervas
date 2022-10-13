@@ -10,19 +10,20 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
-import { AuthProvider } from './src/hooks/auth';
+import { AuthProvider, useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';
 import { AppStackRoutes } from './src/routes/app.stack.routes';
 import { AppTabRoutes } from './src/routes/app.tab.routes';
 
 export default function App() {
+  const { userStorageLoading } = useAuth();
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || userStorageLoading) {
     return <AppLoading />;
   }
 
@@ -30,7 +31,9 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
-          <AppTabRoutes />
+          <AuthProvider>
+            <Routes />
+          </AuthProvider>
         </NavigationContainer>
       </GestureHandlerRootView>
     </ThemeProvider>
