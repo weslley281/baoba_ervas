@@ -10,17 +10,7 @@ import { Button } from '../../components/Button';
 import { Container, ContainerLogo, Form, Header, Logo, Title } from './styles';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
-import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-
-interface FormData {
-  name: string;
-  phone: string;
-  email: string;
-  cpf: string;
-  password: string;
-  birthday: Date;
-}
 
 export function SignIn() {
   const theme = useTheme();

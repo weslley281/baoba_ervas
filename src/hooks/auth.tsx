@@ -10,10 +10,6 @@ import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const REDIRECT_URI = 'https://auth.expo.io/@weslley.ferraz/baoba_ervas';
-const CLIENT_ID =
-  '778843493797-en06e73ab4k4jgoh8f5kjbuous23ab17.apps.googleusercontent.com';
-
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -50,6 +46,9 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   async function signInWithGoogle() {
     try {
+      const REDIRECT_URI = 'https://auth.expo.io/@weslley.ferraz/baoba_ervas';
+      const CLIENT_ID =
+        '778843493797-en06e73ab4k4jgoh8f5kjbuous23ab17.apps.googleusercontent.com';
       const RESPONSE_TYPE = 'token';
       const SCOPE = encodeURI('profile email');
 
