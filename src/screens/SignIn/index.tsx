@@ -10,12 +10,12 @@ import {
 } from './styles';
 import AppleSvg from '../../assets/apple.svg';
 import GoogleSvg from '../../assets/google.svg';
-import LogoSvg from '../../assets/logo.svg';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { SignInSocialButton } from '../../components/SignInSocialButton';
+import LogoSvg from '../../assets/logo.png';
+import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
 import { ActivityIndicator, Alert, Platform } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { SignInSocialButton } from '../../components/SignInSocialButton';
 
 export function SignIn() {
   const theme = useTheme();
@@ -74,7 +74,7 @@ export function SignIn() {
         </FooterWrapper>
         {isLoading && (
           <ActivityIndicator
-            color={theme.colors.border}
+            color={theme.colors.secondary_light}
             size="large"
             style={{ marginTop: 18 }}
           />
