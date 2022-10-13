@@ -13,15 +13,17 @@ import {
   Form,
   Header,
   Input,
+  SignInSocialButton,
   TextInputMasked,
   Title,
+  TitleButton,
 } from './styles';
 
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
-import { SignInSocialButton } from '../../components/SignInSocialButton';
+
 import GoogleSvg from '../../assets/google.svg';
 
 interface FormData {
@@ -58,9 +60,13 @@ export function SignIn() {
           </Header>
 
           <Form>
-            <SignInSocialButton
+            <SignInSocialButton onPress={handleSignInWithGoogle}>
+              <TitleButton>Entrar com a Google</TitleButton>
+            </SignInSocialButton>
+            <Button
               title="Entrar com a Google"
               onPress={handleSignInWithGoogle}
+              color={theme.colors.shape}
             />
           </Form>
         </Container>

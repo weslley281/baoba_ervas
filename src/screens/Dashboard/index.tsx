@@ -17,10 +17,13 @@ import {
   ContainerButton,
   Footer,
 } from './styles';
+import { useAuth } from '../../hooks/auth';
+import { ContainerUser } from '../../components/ContainerUser';
 
 export function Dashboard() {
   const theme = useTheme();
   const { navigate, goBack } = useNavigation<any>();
+  const { signOut, user } = useAuth();
 
   function handleScreenRegister() {
     navigate('Register');
@@ -34,6 +37,7 @@ export function Dashboard() {
   return (
     <Container>
       <Header>
+        <ContainerUser name={user.name} photo={user.photo} signOut={signOut} />
         <ContainerLogo>
           <Logo source={require('../../images/logo_baoba.png')} />
         </ContainerLogo>
