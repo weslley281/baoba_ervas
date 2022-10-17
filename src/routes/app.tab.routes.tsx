@@ -50,7 +50,7 @@ export function AppTabRoutes() {
         component={Profile}
         options={{
           tabBarIcon: () => (
-            <Feather name="users" size={24} color={theme.colors.primary} />
+            <Feather name="user" size={24} color={theme.colors.primary} />
           ),
         }}
       />

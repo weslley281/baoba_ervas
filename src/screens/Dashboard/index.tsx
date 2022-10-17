@@ -26,7 +26,7 @@ export function Dashboard() {
   const { signOut, user } = useAuth();
 
   function handleScreenRegister() {
-    navigate('Register');
+    navigate('Perfil');
   }
 
   function handleScreenProducts() {

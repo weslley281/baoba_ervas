@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SignIn } from '../screens/SignIn2';
 import { Products } from '../screens/Products';
 import { Register } from '../screens/Register';
 import { Dashboard } from '../screens/Dashboard';
