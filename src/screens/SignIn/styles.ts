@@ -44,3 +44,26 @@ export const Logo = styled.Image`
   height: ${RFValue(50)}px;
   border-radius: 10px;
 `;
+
+export const ContainerSocialButton = styled.View`
+  width: 100%;
+  height: ${RFValue(48)}px;
+  flex-direction: row;
+  background-color: red;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: #ea4335;
+`;
+
+export const ContainerIcon = styled.View`
+  width: ${RFValue(50)}px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ContainerButton = styled.View`
+  flex: 1;
+`;
+
+export const SocialButton = styled.Button``;

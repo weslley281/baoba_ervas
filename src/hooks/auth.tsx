@@ -17,6 +17,7 @@ interface AuthProviderProps {
 interface User {
   id: string;
   name: string;
+  fullName?: string;
   email: string;
   photo?: string;
 }
@@ -72,9 +73,12 @@ function AuthProvider({ children }: AuthProviderProps) {
         const userLogged = {
           id: userInfo.id,
           email: userInfo.email,
+          fullName: userInfo.name,
           name,
           photo,
         };
+
+        console.log(userInfo);
 
         setUser(userLogged);
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));

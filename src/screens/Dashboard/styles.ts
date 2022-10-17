@@ -18,7 +18,6 @@ export const ContainerLogo = styled.View`
   height: ${RFValue(150)}px;
   align-items: center;
   justify-content: center;
-  padding-top: 40px;
 `;
 
 export const Logo = styled.Image`
@@ -34,7 +33,7 @@ export const ContainerButton = styled.View`
 
 export const ContainerTitle = styled.View`
   width: 100%;
-  height: ${RFValue(100)}px;
+  height: ${RFValue(60)}px;
   align-items: center;
   justify-content: center;
 `;
@@ -54,4 +53,5 @@ export const Slogan = styled.Text`
 
 export const Footer = styled.View`
   width: 90%;
+  margin-bottom: 5px;
 `;

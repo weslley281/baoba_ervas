@@ -9,6 +9,9 @@ export default {
     danger: '#E83F5B',
     danger_light: 'rgba(232, 63, 61, 0.5)',
 
+    alert: '#FFFF00',
+    alert_light: '#9ACD32',
+
     shape: '#FFFFFF',
     title: '#363F5F',
     text: '#969CB2',

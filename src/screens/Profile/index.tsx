@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Keyboard,
@@ -20,6 +20,7 @@ import {
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
+import { ContainerUser } from '../../components/ContainerUser';
 
 interface FormData {
   name: string;
@@ -30,13 +31,34 @@ interface FormData {
   birthday: Date;
 }
 
-export function Register() {
+export function Profile() {
   const { signOut, user } = useAuth();
+  const [id, setId] = useState(user.id);
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState(user.email);
+  const [name, setName] = useState(user.fullName);
   const { navigate, goBack } = useNavigation<any>();
+
+  async function bringResultsOfUser() {
+    const searsh_email = await api.get(
+      `clients/searsh_cliente_email.php?email=${user.email}`
+    );
+    if (searsh_email.data.success == true) {
+      console.log('Deu certo');
+      const result = searsh_email.data.resultado;
+      setId(searsh_email.data.resultado.id);
+      setName(searsh_email.data.resultado.name);
+      setPhone(searsh_email.data.resultado.phone);
+      setEmail(searsh_email.data.resultado.email);
+      console.log(result.birthday);
+    } else {
+      console.log(user.email);
+      console.log(searsh_email.data.email);
+      console.log(searsh_email.data.success);
+      console.log('Não deu certo');
+    }
+  }
 
   async function handleRegister() {
     const arrayOfName = name.split(' ');
@@ -76,49 +98,55 @@ export function Register() {
     }
 
     const obj = {
+      id: id,
       name: name,
       phone: phone,
       birthday: dataFormatada,
-      email: email,
+      email: user.email,
     };
+    console.log(obj);
 
     const searsh_email = await api.get(
       `clients/searsh_cliente_email.php?email=${email}`
     );
     if (searsh_email.data.success == true) {
-      Alert.alert('Alerta', 'Email já Cadastrado');
-      return;
+      console.log('Executou esse');
+      await api
+        .post('clients/insert_existing_client.php', obj)
+        .then(() => {
+          setTimeout(() => {
+            Alert.alert('Alerta', 'Alterado com sucesso');
+          }, 1500);
+        })
+        .catch((error) => Alert.alert('Erro', error));
+    } else {
+      console.log('Executou esse outro');
+      await api
+        .post('clients/insert_client.php', obj)
+        .then(() => {
+          setTimeout(() => {
+            Alert.alert('Alerta', 'Alterado com sucesso');
+          }, 1500);
+        })
+        .catch((error) => Alert.alert('Erro', error));
     }
-
-    const searsh_phone = await api.get(
-      `clients/searsh_cliente_phone.php?phone=${phone}`
-    );
-    if (searsh_phone.data.success == true) {
-      Alert.alert('Alerta', 'Telefone já Cadastrado');
-      return;
-    }
-
-    await api
-      .post('clients/insert_client.php', obj)
-      .then(() => {
-        setTimeout(() => {
-          navigate('Home');
-          Alert.alert('Alerta', 'Salvo com sucesso');
-        }, 1500);
-      })
-      .catch((error) => Alert.alert('Erro', error));
-    setName('');
-    setPhone('');
-    setDate('');
-    setEmail('');
   }
+
+  useEffect(() => {
+    bringResultsOfUser();
+  }, []);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          <ContainerUser
+            name={user.name}
+            photo={user.photo}
+            signOut={signOut}
+          />
           <Header>
-            <Title>Registro</Title>
+            <Title>Meus Dados</Title>
           </Header>
 
           <ContainerForm>
@@ -162,10 +190,11 @@ export function Register() {
                 autoCapitalize="none"
                 value={email}
                 onChangeText={(text: string) => setEmail(text)}
+                disabled
               />
 
               <Button
-                title="Enviar"
+                title="Alterar"
                 light
                 onPress={() => {
                   handleRegister();

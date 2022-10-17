@@ -6,6 +6,7 @@ import { AppStackRoutes } from './app.stack.routes';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { SignIn } from '../screens/SignIn';
+import { Profile } from '../screens/Profile';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -45,8 +46,8 @@ export function AppTabRoutes() {
       />
 
       <Screen
-        name="Registro"
-        component={Register}
+        name="Perfil"
+        component={Profile}
         options={{
           tabBarIcon: () => (
             <Feather name="users" size={24} color={theme.colors.primary} />

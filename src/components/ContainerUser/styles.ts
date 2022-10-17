@@ -6,11 +6,13 @@ import { BorderlessButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   width: 100%;
-  height: 70px;
+  height: 50px;
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 
-export const Header = styled.View``;
+export const Header = styled.View`
+  background-color: ${({ theme }) => theme.colors.primary};
+`;
 
 export const Title = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};
@@ -21,7 +23,7 @@ export const Title = styled.Text`
 export const UserWrapper = styled.View`
   width: 100%;
   padding: 0 24px;
-  margin-top: ${getStatusBarHeight() + RFValue(28)}px;
+  margin-top: ${getStatusBarHeight() + RFValue(5)}px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

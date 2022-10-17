@@ -22,26 +22,24 @@ interface Props {
 
 export function ContainerUser({ name, photo, signOut }: Props) {
   return (
-    <Container>
-      <Header>
-        <UserWrapper>
-          <UserInfo>
-            <Photo
-              source={{
-                uri: photo,
-              }}
-            />
-            <User>
-              <UserGreeting>Olá, </UserGreeting>
-              <UserName>{name}</UserName>
-            </User>
-          </UserInfo>
+    <Header>
+      <UserWrapper>
+        <UserInfo>
+          <Photo
+            source={{
+              uri: photo,
+            }}
+          />
+          <User>
+            <UserGreeting>Olá, </UserGreeting>
+            <UserName>{name}</UserName>
+          </User>
+        </UserInfo>
 
-          <LogoutButton onPress={signOut}>
-            <Icon name="log-out" />
-          </LogoutButton>
-        </UserWrapper>
-      </Header>
-    </Container>
+        <LogoutButton onPress={signOut}>
+          <Icon name="log-out" />
+        </LogoutButton>
+      </UserWrapper>
+    </Header>
   );
 }
