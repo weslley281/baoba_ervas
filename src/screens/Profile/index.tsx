@@ -22,12 +22,11 @@ import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
 
-interface FormData {
+interface User {
   name: string;
   phone: string;
   email: string;
-  cpf: string;
-  password: string;
+  id_google: string;
   birthday: Date;
 }
 
@@ -38,20 +37,33 @@ export function Profile() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
+  const [data, setData] = useState<User[]>([]);
   const { navigate, goBack } = useNavigation<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function bringResultsOfUser() {
     const searsh_email = await api.get(
       `clients/searsh_cliente_email.php?email=${user.email}`
     );
     if (searsh_email.data.success == true) {
-      console.log('Deu certo');
-      const result = searsh_email.data.resultado;
-      setId(searsh_email.data.resultado.id);
-      setName(searsh_email.data.resultado.name);
-      setPhone(searsh_email.data.resultado.phone);
-      setEmail(searsh_email.data.resultado.email);
-      console.log(result.birthday);
+      try {
+        setIsLoading(true);
+        const response = await api.get(
+          `clients/searsh_cliente_email.php?email=${user.email}`
+        );
+
+        setData([...data, ...response.data.resultado]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+
+      // setId(searsh_email.data.resultado.id);
+      // setName(searsh_email.data.resultado.name);
+      // setPhone(searsh_email.data.resultado.phone);
+      // setEmail(searsh_email.data.resultado.email);
+      console.log(data.values.length);
     } else {
       console.log(user.email);
       console.log(searsh_email.data.email);
