@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Keyboard,
@@ -21,6 +21,7 @@ import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 interface User {
   name: string;
@@ -37,37 +38,51 @@ export function Profile() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
+  const [birthday, setBirthday] = useState(new Date());
   const [data, setData] = useState<User[]>([]);
   const { navigate, goBack } = useNavigation<any>();
   const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+  async function listData() {
+    try {
+      setIsLoading(true);
+      const response = await api.get(
+        `clients/searsh_cliente_email.php?email=${user.email}`
+      );
+
+      if (data.length >= response.data.totalItems) return;
+
+      setData([...data, ...response.data.resultado]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function bringResultsOfUser() {
-    const searsh_email = await api.get(
+    const response = await api.get(
       `clients/searsh_cliente_email.php?email=${user.email}`
     );
-    if (searsh_email.data.success == true) {
+    if (response.data.success == true) {
       try {
-        setIsLoading(true);
-        const response = await api.get(
-          `clients/searsh_cliente_email.php?email=${user.email}`
-        );
+        setData(response.data.resultado);
 
-        setData([...data, ...response.data.resultado]);
+        data.map((item) => {
+          setName(item.name);
+          setPhone(item.phone);
+          setEmail(item.email);
+          setId(item.id_google);
+          setBirthday(item.birthday);
+        });
+        console.log(data);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
       }
-
-      // setId(searsh_email.data.resultado.id);
-      // setName(searsh_email.data.resultado.name);
-      // setPhone(searsh_email.data.resultado.phone);
-      // setEmail(searsh_email.data.resultado.email);
-      console.log(data.values.length);
     } else {
-      console.log(user.email);
-      console.log(searsh_email.data.email);
-      console.log(searsh_email.data.success);
       console.log('Não deu certo');
     }
   }
@@ -145,8 +160,21 @@ export function Profile() {
   }
 
   useEffect(() => {
-    bringResultsOfUser();
+    listData();
+    console.log(data);
   }, []);
+
+  useEffect(() => {
+    listData();
+    console.log(data);
+  }, [isFocused]);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log('buscou os dados');
+  //     bringResultsOfUser();
+  //   }, [])
+  // );
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
