@@ -2,7 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import React from 'react';
 import { Button } from '../../components/Button';
 import { ProductsProps } from '../../DTO/ProductsDTO';
-import { Linking } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import {
   Container,
   ContainerDescriptions,
@@ -50,11 +50,13 @@ export function ProductDetail() {
         <Line />
 
         <ContainerDescriptions>
-          <Descriptions>
-            {product.descriptiom
-              ? product.descriptiom
-              : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo'}
-          </Descriptions>
+          <ScrollView>
+            <Descriptions>
+              {product.descriptiom
+                ? product.descriptiom
+                : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo'}
+            </Descriptions>
+          </ScrollView>
 
           <Button title="Tenho interesse" light onPress={redirectToWhatsapp} />
         </ContainerDescriptions>

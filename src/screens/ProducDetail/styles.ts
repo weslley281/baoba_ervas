@@ -54,6 +54,7 @@ export const Line = styled.View`
 `;
 
 export const ContainerDescriptions = styled.View`
+  flex: 1;
   align-items: flex-end;
 `;
 
