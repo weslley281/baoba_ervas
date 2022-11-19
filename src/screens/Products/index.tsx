@@ -20,11 +20,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { ProductsProps } from '../../DTO/ProductsDTO';
 
 export function Products() {
-  const theme = useTheme();
   const isFocused = useIsFocused();
   const [products, setProducts] = useState<ProductsProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState<any>('');
   const [cagoryModalOpen, setCagoryModalOpen] = useState(false);
   const { navigate, goBack } = useNavigation<any>();
@@ -37,11 +35,12 @@ export function Products() {
   async function listProducts() {
     try {
       setIsLoading(true);
-      const response = await api.get(`products/product_list.php`);
+      const response = await api.get(`products/product_list`);
+      // console.log(response);
 
-      if (products.length >= response.data.totalItems) return;
+      // if (products.length >= response.data.totalItems) return;
 
-      setProducts([...products, ...response.data.resultado]);
+      setProducts([...products, ...response.data]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -113,12 +112,11 @@ export function Products() {
           <FlatList
             data={products}
             numColumns={2}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={{
               paddingLeft: 18,
               alignItems: 'center',
               justifyContent: 'center',
-              // backgroundColor: 'red',
             }}
             renderItem={({ item }) => (
               <CardProducts
@@ -135,9 +133,8 @@ export function Products() {
           contentContainerStyle={{
             paddingLeft: 18,
             alignItems: 'center',
-            // backgroundColor: 'blue',
           }}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <CardProducts
               data={item}
