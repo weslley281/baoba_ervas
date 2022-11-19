@@ -112,7 +112,7 @@ export function Products() {
           <FlatList
             data={products}
             numColumns={2}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.product_id.toString()}
             contentContainerStyle={{
               paddingLeft: 18,
               alignItems: 'center',
@@ -134,7 +134,7 @@ export function Products() {
             paddingLeft: 18,
             alignItems: 'center',
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.product_id.toString()}
           renderItem={({ item }) => (
             <CardProducts
               data={item}
