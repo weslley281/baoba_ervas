@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
-import { NavigationContainer } from '@react-navigation/native';
 import theme from './src/global/styles/theme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
@@ -12,8 +11,6 @@ import {
 } from '@expo-google-fonts/poppins';
 import { AuthProvider, useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';
-import { AppStackRoutes } from './src/routes/app.stack.routes';
-import { AppTabRoutes } from './src/routes/app.tab.routes';
 
 export default function App() {
   const { userStorageLoading } = useAuth();
