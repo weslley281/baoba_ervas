@@ -2,11 +2,13 @@ import React from 'react';
 import { Products } from '../screens/Products';
 import { Register } from '../screens/Register';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AppStackRoutes } from './app.stack.routes';
+import { AppStackHomeRoutes } from './app.stackHome.routes';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { SignIn } from '../screens/SignIn';
 import { Profile } from '../screens/Profile';
+import { AppStackProductsRoutes } from './app.stackProducts.routes';
+import { AppStackProfileRoutes } from './app.stackProfile.routes';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -28,7 +30,7 @@ export function AppTabRoutes() {
     >
       <Screen
         name="Home"
-        component={AppStackRoutes}
+        component={AppStackHomeRoutes}
         options={{
           tabBarIcon: () => (
             <Feather name="home" size={24} color={theme.colors.primary} />
@@ -37,7 +39,7 @@ export function AppTabRoutes() {
       />
       <Screen
         name="Produtos"
-        component={Products}
+        component={AppStackProductsRoutes}
         options={{
           tabBarIcon: () => (
             <Feather name="archive" size={24} color={theme.colors.primary} />
@@ -47,7 +49,7 @@ export function AppTabRoutes() {
 
       <Screen
         name="Perfil"
-        component={Profile}
+        component={AppStackProfileRoutes}
         options={{
           tabBarIcon: () => (
             <Feather name="user" size={24} color={theme.colors.primary} />

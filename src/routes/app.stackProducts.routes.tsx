@@ -8,16 +8,14 @@ import { ProductDetail } from '../screens/ProducDetail';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
-export function AppStackRoutes() {
+export function AppStackProductsRoutes() {
   return (
     <Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Products"
       screenOptions={{ headerShown: false }}
     >
-      <Screen name="Dashboard" component={Dashboard} />
       <Screen name="Products" component={Products} />
       <Screen name="Product" component={ProductDetail} />
-      <Screen name="Register" component={Register} />
     </Navigator>
   );
 }

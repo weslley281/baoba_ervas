@@ -3,6 +3,11 @@ export interface ProductsProps {
   name: string;
   descriptiom: string;
   price: number;
+  promotionPrice: number;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
   category: string;
   image: string;
 }
