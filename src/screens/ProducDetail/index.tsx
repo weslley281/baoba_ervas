@@ -26,6 +26,7 @@ export function ProductDetail() {
   const { params } = useRoute();
   const { product } = params as Params;
   const price = product.price.toString().replace('.', ',');
+  // const details = `Detalhes:\nPeso = ${product.weight}g\n, Comprimemento = ${product.length}cm\n, Largura = ${product.width}cm\n, Altura = ${product.height}cm`;
 
   function redirectToWhatsapp() {
     Linking.openURL(
@@ -54,8 +55,9 @@ export function ProductDetail() {
             <Descriptions>
               {product.descriptiom
                 ? product.descriptiom
-                : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo'}
+                : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo\n'}
             </Descriptions>
+            {/* <Descriptions>{details}</Descriptions> */}
           </ScrollView>
 
           <Button title="Tenho interesse" light onPress={redirectToWhatsapp} />
