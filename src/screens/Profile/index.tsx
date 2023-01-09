@@ -104,7 +104,7 @@ export function Profile() {
   }
 
   async function handleRegister() {
-    const arrayOfName = name.split(' ');
+    const arrayOfName = name!.split(' ');
     const arrayOfDate = date.split('/');
     const ano = new Date().getFullYear();
     const anoInvalido = ano - 100;
@@ -198,7 +198,7 @@ export function Profile() {
         <Container>
           <ContainerUser
             name={user.name}
-            photo={user.photo}
+            photo={user.photo!}
             signOut={signOut}
           />
           <Header>
