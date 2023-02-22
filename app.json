@@ -1,8 +1,7 @@
 {
   "expo": {
-    "name": "baoba_ervas",
-    "slug": "baoba_ervas",
-    "scheme": "baoba_ervas",
+    "name": "baobaervas",
+    "slug": "baobaervas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +14,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -23,16 +24,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.weslley.ferraz.baoba_ervas"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "075a0d44-ba68-434e-bdd7-2461c76aac88"
-      }
     }
   }
 }
