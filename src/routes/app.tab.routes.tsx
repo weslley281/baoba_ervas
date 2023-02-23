@@ -37,6 +37,7 @@ export function AppTabRoutes() {
           ),
         }}
       />
+
       <Screen
         name="Produtos"
         component={AppStackProductsRoutes}
