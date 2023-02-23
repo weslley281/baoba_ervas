@@ -8,7 +8,8 @@ import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import { ProductsProps } from '../../DTO/ProductsDTO';
 import theme from '../../global/styles/theme';
-import { CartProvider, useCart } from '../../contexts/CartContext';
+import { useContext } from 'react';
+import { CartContext } from '../../contexts/CartContext';
 
 interface CardProductsProps {
   data: ProductsProps;
@@ -27,6 +28,7 @@ export function Products() {
   const [filteredProducts, setFilteredProducts] = useState<ProductsProps[]>([]);
 
   const { navigate } = useNavigation<any>();
+  const cartContext = useContext(CartContext);
 
   async function loadProducts() {
     try {
