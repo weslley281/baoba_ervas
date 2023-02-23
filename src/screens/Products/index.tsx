@@ -1,46 +1,39 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import {
-  Container,
-  Form,
-  Header,
-  Input,
-  LoadContainer,
-  Ordination,
-  Title,
-} from './styles';
+import React, { useEffect, useState } from 'react';
+import { Container, Form, Header, Input, LoadContainer, Title } from './styles';
 import { ActivityIndicator, FlatList, Modal } from 'react-native';
 import { CategorySelectButton } from '../../components/CategorySelectButton';
 import { CardProducts } from '../../components/CardProducts';
 import { CategorySelect } from '../CategorySelect';
 import { api } from '../../services/api';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useTheme } from 'styled-components';
-import { Load } from '../../components/Load';
-import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { ProductsProps } from '../../DTO/ProductsDTO';
+import theme from '../../global/styles/theme';
+import { CartProvider, useCart } from '../../contexts/CartContext';
 
+interface CardProductsProps {
+  data: ProductsProps;
+  onPress: () => void;
+  onAddToCart: () => void;
+}
 export function Products() {
-  const isFocused = useIsFocused();
   const [products, setProducts] = useState<ProductsProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchText, setSearchText] = useState<any>('');
-  const [cagoryModalOpen, setCagoryModalOpen] = useState(false);
-  const { navigate, goBack } = useNavigation<any>();
+  const [searchText, setSearchText] = useState('');
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [category, setCategory] = useState({
     key: 'todos',
     name: 'Categorias',
   });
-  const [searchProducts, setSearchProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState<ProductsProps[]>([]);
 
-  async function listProducts() {
+  const { navigate } = useNavigation<any>();
+
+  async function loadProducts() {
     try {
       setIsLoading(true);
       const response = await api.get(`products/product_list`);
-      // console.log(response);
-
-      // if (products.length >= response.data.totalItems) return;
-
-      setProducts([...products, ...response.data]);
+      setProducts(response.data);
+      setFilteredProducts(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -48,46 +41,43 @@ export function Products() {
     }
   }
 
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  useEffect(() => {
+    if (category.key === 'todos') {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(
+        (item) => item.category.toLowerCase() === category.key
+      );
+      setFilteredProducts(filtered);
+    }
+  }, [category, products]);
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(
+        (item) => item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+      );
+      setFilteredProducts(filtered);
+    }
+  }, [searchText, products]);
+
   function handleOpenSelectCategoryModal() {
-    setCagoryModalOpen(true);
+    setCategoryModalOpen(true);
   }
 
   function handleCloseSelectCategoryModal() {
-    setCagoryModalOpen(false);
+    setCategoryModalOpen(false);
   }
 
   function handleChangeToProductDetail(product: ProductsProps) {
     navigate('Product', { product });
   }
-
-  useEffect(() => {
-    listProducts();
-  }, []);
-
-  useEffect(() => {
-    listProducts();
-  }, [isFocused]);
-
-  //busca por texto
-  useEffect(() => {
-    if (searchText === '') {
-      setSearchProducts(products);
-    } else {
-      setSearchProducts(
-        products.filter(
-          (item) =>
-            item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
-        )
-      );
-    }
-  }, [searchText]);
-
-  //busca por categoria
-  useEffect(() => {
-    setSearchProducts(
-      products.filter((item) => item.category.toLowerCase() === category.key)
-    );
-  }, [category]);
 
   return (
     <Container>
@@ -105,30 +95,14 @@ export function Products() {
           onChangeText={(text: string) => setSearchText(text)}
         />
       </Form>
-      {searchText === '' && category.key === 'todos' ? (
-        isLoading ? (
-          <Load />
-        ) : (
-          <FlatList
-            data={products}
-            numColumns={2}
-            keyExtractor={(item) => item.product_id.toString()}
-            contentContainerStyle={{
-              paddingLeft: 18,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            renderItem={({ item }) => (
-              <CardProducts
-                data={item}
-                onPress={() => handleChangeToProductDetail(item)}
-              />
-            )}
-          />
-        )
+
+      {isLoading ? (
+        <LoadContainer>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </LoadContainer>
       ) : (
         <FlatList
-          data={searchProducts}
+          data={filteredProducts}
           numColumns={2}
           contentContainerStyle={{
             paddingLeft: 18,
@@ -144,7 +118,7 @@ export function Products() {
         />
       )}
 
-      <Modal visible={cagoryModalOpen}>
+      <Modal visible={categoryModalOpen}>
         <CategorySelect
           category={category}
           setCategory={setCategory}

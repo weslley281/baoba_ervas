@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/poppins';
 import { AuthProvider, useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';
+import { CartProvider } from './src/contexts/CartContext';
 
 export default function App() {
   const { userStorageLoading } = useAuth();
