@@ -2,27 +2,14 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  Button,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
-// import { Button } from '../../components/Button';
-import {
-  Container,
-  ContainerButton,
-  ContainerIcon,
-  ContainerLogo,
-  ContainerSocialButton,
-  Form,
-  Header,
-  Logo,
-  Title,
-} from './styles';
+import { Container, ContainerLogo, Form, Header, Logo, Title } from './styles';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
-import { AntDesign } from '@expo/vector-icons';
-import { SignInSocialButton } from '../../components/SignInSocialButton';
+import { ButtonWithGoogleIcon } from '../../components/ButtonWithGoogleIcon';
 
 export function SignIn() {
   const theme = useTheme();
@@ -52,16 +39,10 @@ export function SignIn() {
           </Header>
 
           <Form>
-            <ContainerSocialButton>
-              <ContainerIcon>
-                <AntDesign name="google" size={24} color="#FBBC05" />
-              </ContainerIcon>
-
-              <SignInSocialButton
-                title="Login"
-                onPress={handleSignInWithGoogle}
-              />
-            </ContainerSocialButton>
+            <ButtonWithGoogleIcon
+              title="Login com o Google"
+              onPress={handleSignInWithGoogle}
+            />
           </Form>
 
           {isLoading && (

@@ -12,6 +12,8 @@ export default {
     alert: '#FFFF00',
     alert_light: '#9ACD32',
 
+    google_red: '#db4437',
+
     shape: '#FFFFFF',
     title: '#363F5F',
     text: '#969CB2',
