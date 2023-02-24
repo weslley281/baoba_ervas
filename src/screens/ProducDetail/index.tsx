@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from '../../components/Button';
 import { ProductsProps } from '../../DTO/ProductsDTO';
 import { Linking, ScrollView } from 'react-native';
@@ -16,7 +16,6 @@ import {
   Price,
   Title,
 } from './styles';
-import { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
 
 interface Params {
@@ -28,9 +27,14 @@ export function ProductDetail() {
   const { params } = useRoute();
   const { product } = params as Params;
   const price = product.price.toString().replace('.', ',');
-  // const details = `Detalhes:\nPeso = ${product.weight}g\n, Comprimemento = ${product.length}cm\n, Largura = ${product.width}cm\n, Altura = ${product.height}cm`;
 
-  const cartContext = useContext(CartContext);
+  const { productsCart, addProductToCart, removeProductToCart, clearCart } =
+    useContext(CartContext);
+
+  const totalItems = productsCart.reduce(
+    (accumulator, product) => accumulator + product.qtd,
+    0
+  );
 
   function redirectToWhatsapp() {
     Linking.openURL(
@@ -39,11 +43,11 @@ export function ProductDetail() {
   }
 
   function handleAddToCart(id: number) {
-    cartContext.addProductToCart(id);
+    addProductToCart(id);
   }
 
   function handleRemoveToCart(id: number) {
-    cartContext.removeProductToCart(id);
+    removeProductToCart(id);
   }
 
   return (
@@ -64,6 +68,9 @@ export function ProductDetail() {
 
         <ContainerDescriptions>
           <ScrollView>
+            <Descriptions>
+              Total de itens no carrinho: {totalItems}
+            </Descriptions>
             <Descriptions>
               {product.descriptiom
                 ? product.descriptiom

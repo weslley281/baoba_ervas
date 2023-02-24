@@ -4,11 +4,11 @@ import theme from '../../global/styles/theme';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${theme.colors.background};
 `;
 
 export const Header = styled.View`
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${theme.colors.primary};
   width: 100%;
   height: ${RFValue(300)}px;
   align-items: center;
@@ -22,9 +22,9 @@ export const HeaderContainer = styled.View`
 `;
 
 export const Title = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.bold};
+  font-family: ${theme.fonts.bold};
   font-size: ${RFValue(20)}px;
-  color: ${({ theme }) => theme.colors.shape};
+  color: ${theme.colors.shape};
 `;
 
 export const ImageProduct = styled.Image`
@@ -43,14 +43,14 @@ export const ContainerPrice = styled.View`
 `;
 
 export const Price = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.medium};
+  font-family: ${theme.fonts.medium};
   font-size: ${RFValue(20)}px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${theme.colors.text_dark};
 `;
 
 export const Line = styled.View`
   border: 1px;
-  border-color: ${({ theme }) => theme.colors.primary};
+  border-color: ${theme.colors.primary};
 `;
 
 export const ContainerDescriptions = styled.View`
@@ -59,8 +59,8 @@ export const ContainerDescriptions = styled.View`
 `;
 
 export const Descriptions = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
+  font-family: ${theme.fonts.regular};
   font-size: ${RFValue(18)}px;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${theme.colors.text};
   text-align: justify;
 `;
