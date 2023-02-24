@@ -39,14 +39,19 @@ export function ProductDetail() {
     0
   );
 
+  const totalItemsValue = productsCart.reduce(
+    (accumulator, product) => accumulator + product.value,
+    0
+  );
+
   function redirectToWhatsapp() {
     Linking.openURL(
       `https://api.whatsapp.com/send?phone=556533621007&text=Olá%20tenho%20interesse%20em%20comprar%20o%20produto:%20${product.name}`
     );
   }
 
-  function handleAddToCart(id: number) {
-    addProductToCart(id);
+  function handleAddToCart(id: number, value: number) {
+    addProductToCart(id, value);
   }
 
   function handleRemoveToCart(id: number) {
@@ -73,6 +78,7 @@ export function ProductDetail() {
           <ScrollView>
             <Descriptions>
               Total de itens no carrinho: {totalItems}
+              Valor do Total de itens no carrinho: {totalItemsValue}
             </Descriptions>
             <Descriptions>
               {product.descriptiom
@@ -86,7 +92,7 @@ export function ProductDetail() {
             title="Adcionar ao Carrinho"
             light
             onPress={() => {
-              handleAddToCart(product.product_id);
+              handleAddToCart(product.product_id, product.price);
             }}
           />
           <Button
