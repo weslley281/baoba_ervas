@@ -1,8 +1,9 @@
-import { useRoute } from '@react-navigation/native';
+//libs
 import React, { useContext } from 'react';
-import { Button } from '../../components/Button';
-import { ProductsProps } from '../../DTO/ProductsDTO';
 import { Linking, ScrollView } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+//imports
+import { ProductsProps } from '../../DTO/ProductsDTO';
 import {
   Container,
   ContainerDescriptions,
@@ -17,6 +18,8 @@ import {
   Title,
 } from './styles';
 import { CartContext } from '../../contexts/CartContext';
+//components
+import { Button } from '../../components/Button';
 
 interface Params {
   product: ProductsProps;
