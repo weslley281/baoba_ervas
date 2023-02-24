@@ -1,15 +1,16 @@
 import React from 'react';
-import { RectButtonProps } from 'react-native-gesture-handler';
+import { TouchableOpacityProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 import { Button, Text } from './styles';
 
-interface Props extends RectButtonProps {
+interface Props extends TouchableOpacityProps {
   title: string;
+  onPress: () => void;
 }
 
-export function SignInSocialButton({ title, ...rest }: Props) {
+export function SignInSocialButton({ onPress, title, ...rest }: Props) {
   return (
-    <Button {...rest}>
+    <Button onPress={onPress} {...rest}>
       <Text>{title}</Text>
     </Button>
   );

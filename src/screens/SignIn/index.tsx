@@ -17,12 +17,12 @@ import {
   Form,
   Header,
   Logo,
-  SocialButton,
   Title,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
 import { AntDesign } from '@expo/vector-icons';
+import { SignInSocialButton } from '../../components/SignInSocialButton';
 
 export function SignIn() {
   const theme = useTheme();
@@ -57,16 +57,10 @@ export function SignIn() {
                 <AntDesign name="google" size={24} color="#FBBC05" />
               </ContainerIcon>
 
-              <ContainerButton>
-                <SocialButton
-                  styles={{
-                    height: 200,
-                  }}
-                  color="#ea4335"
-                  title="aqui"
-                  onPress={handleSignInWithGoogle}
-                />
-              </ContainerButton>
+              <SignInSocialButton
+                title="Login"
+                onPress={handleSignInWithGoogle}
+              />
             </ContainerSocialButton>
           </Form>
 
