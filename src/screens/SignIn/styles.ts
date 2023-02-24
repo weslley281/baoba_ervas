@@ -1,7 +1,5 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
-import { TextInputMask } from 'react-native-masked-text';
-import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.background};

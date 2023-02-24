@@ -1,5 +1,4 @@
 import React from 'react';
-import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
 import theme from './src/global/styles/theme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,6 +11,7 @@ import {
 import { AuthProvider, useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';
 import CartProvider from './src/contexts/CartContext';
+import Overlay from 'react-native-loading-spinner-overlay';
 
 export default function App() {
   const { userStorageLoading } = useAuth();
@@ -22,7 +22,14 @@ export default function App() {
   });
 
   if (!fontsLoaded || userStorageLoading) {
-    return <AppLoading />;
+    return (
+      <Overlay
+        visible={true}
+        color={theme.colors.primary}
+        animation="fade"
+        size="large"
+      />
+    );
   }
 
   return (
