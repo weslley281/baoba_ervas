@@ -125,7 +125,6 @@ export function Register() {
             <Form>
               <Input
                 autoComplete="name"
-                name="name"
                 placeholder="Nome Completo"
                 value={name}
                 onChangeText={(text: string) => setName(text)}
@@ -157,7 +156,6 @@ export function Register() {
 
               <Input
                 autoComplete="email"
-                name="email"
                 placeholder="Email"
                 autoCapitalize="none"
                 value={email}

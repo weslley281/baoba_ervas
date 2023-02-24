@@ -16,7 +16,7 @@ import {
 
 interface Props {
   name: string;
-  photo: string;
+  photo: string | undefined;
   signOut: () => void;
 }
 
