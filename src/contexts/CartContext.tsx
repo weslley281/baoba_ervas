@@ -5,7 +5,7 @@ type Product = { id: number; qtd: number; value: number };
 type CartContextType = {
   productsCart: Product[];
   addProductToCart: (id: number, value: number) => void;
-  removeProductToCart: (id: number) => void;
+  removeProductToCart: (id: number, value: number) => void;
   clearCart: () => void;
 };
 
@@ -33,13 +33,14 @@ export default function CartProvider({ children }: CartProviderProps) {
     setProductsCart(copyProductsCart);
   }
 
-  function removeProductToCart(id: number) {
+  function removeProductToCart(id: number, value: number) {
     const copyProductsCart = [...productsCart];
 
     const item = copyProductsCart.find((product) => product.id === id);
 
     if (item && item.qtd > 1) {
       item.qtd = item.qtd - 1;
+      item.value -= value;
       setProductsCart(copyProductsCart);
     } else {
       const arrayFiltered = copyProductsCart.filter(

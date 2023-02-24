@@ -1,7 +1,7 @@
 export interface ProductsProps {
   product_id: number;
   name: string;
-  descriptiom: string;
+  description: string;
   price: number;
   promotionPrice: number;
   length: number;
