@@ -1,15 +1,17 @@
+//libs
 import React, { useEffect, useState } from 'react';
-import { Container, Form, Header, Input, LoadContainer, Title } from './styles';
-import { ActivityIndicator, FlatList, Modal } from 'react-native';
-import { CategorySelectButton } from '../../components/CategorySelectButton';
-import { CardProducts } from '../../components/CardProducts';
-import { CategorySelect } from '../CategorySelect';
-import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
-import { ProductsProps } from '../../DTO/ProductsDTO';
+import { ActivityIndicator, FlatList, Modal } from 'react-native';
+//imports
 import theme from '../../global/styles/theme';
-import { useContext } from 'react';
-import { CartContext } from '../../contexts/CartContext';
+import { api } from '../../services/api';
+import { Container, Form, Header, Input, LoadContainer, Title } from './styles';
+import { CategorySelect } from '../CategorySelect';
+import { ProductsProps } from '../../DTO/ProductsDTO';
+//components
+import { CategorySelectButton } from '../../components/CategorySelectButton';
+import { CardCart } from '../../components/CardCart';
+import { CardProducts } from '../../components/CardProducts';
 
 interface CardProductsProps {
   data: ProductsProps;
@@ -28,7 +30,6 @@ export function Products() {
   const [filteredProducts, setFilteredProducts] = useState<ProductsProps[]>([]);
 
   const { navigate } = useNavigation<any>();
-  const cartContext = useContext(CartContext);
 
   async function loadProducts() {
     try {
@@ -83,6 +84,7 @@ export function Products() {
 
   return (
     <Container>
+      <CardCart />
       <Header>
         <Title>Produtos</Title>
       </Header>

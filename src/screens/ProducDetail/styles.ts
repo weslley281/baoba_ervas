@@ -10,7 +10,7 @@ export const Container = styled.View`
 export const Header = styled.View`
   background-color: ${theme.colors.primary};
   width: 100%;
-  height: ${RFValue(300)}px;
+  height: ${RFValue(250)}px;
   align-items: center;
   justify-content: center;
 `;
@@ -18,7 +18,6 @@ export const Header = styled.View`
 export const HeaderContainer = styled.View`
   width: 90%;
   height: 90%;
-  padding-top: 40px;
 `;
 
 export const Title = styled.Text`
@@ -63,4 +62,12 @@ export const Descriptions = styled.Text`
   font-size: ${RFValue(18)}px;
   color: ${theme.colors.text};
   text-align: justify;
+`;
+
+export const ContainerButtonAddOrRemove = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 10px;
 `;

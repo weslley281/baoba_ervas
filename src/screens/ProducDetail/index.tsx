@@ -1,10 +1,12 @@
-import { useRoute } from '@react-navigation/native';
+//libs
 import React, { useContext } from 'react';
-import { Button } from '../../components/Button';
-import { ProductsProps } from '../../DTO/ProductsDTO';
 import { Linking, ScrollView } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+//imports
+import { ProductsProps } from '../../DTO/ProductsDTO';
 import {
   Container,
+  ContainerButtonAddOrRemove,
   ContainerDescriptions,
   ContainerPrice,
   Content,
@@ -17,6 +19,10 @@ import {
   Title,
 } from './styles';
 import { CartContext } from '../../contexts/CartContext';
+//components
+import { Button } from '../../components/Button';
+import { CardCart } from '../../components/CardCart';
+import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
 
 interface Params {
   product: ProductsProps;
@@ -28,13 +34,7 @@ export function ProductDetail() {
   const { product } = params as Params;
   const price = product.price.toString().replace('.', ',');
 
-  const { productsCart, addProductToCart, removeProductToCart, clearCart } =
-    useContext(CartContext);
-
-  const totalItems = productsCart.reduce(
-    (accumulator, product) => accumulator + product.qtd,
-    0
-  );
+  const { addProductToCart, removeProductToCart } = useContext(CartContext);
 
   function redirectToWhatsapp() {
     Linking.openURL(
@@ -42,16 +42,17 @@ export function ProductDetail() {
     );
   }
 
-  function handleAddToCart(id: number) {
-    addProductToCart(id);
+  function handleAddToCart(id: number, value: number) {
+    addProductToCart(id, value);
   }
 
-  function handleRemoveToCart(id: number) {
-    removeProductToCart(id);
+  function handleRemoveToCart(id: number, value: number) {
+    removeProductToCart(id, value);
   }
 
   return (
     <Container>
+      <CardCart />
       <Header>
         <HeaderContainer>
           <Title>{product.name}</Title>
@@ -69,30 +70,30 @@ export function ProductDetail() {
         <ContainerDescriptions>
           <ScrollView>
             <Descriptions>
-              Total de itens no carrinho: {totalItems}
-            </Descriptions>
-            <Descriptions>
-              {product.descriptiom
-                ? product.descriptiom
+              {product.description
+                ? product.description
                 : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo\n'}
             </Descriptions>
-            {/* <Descriptions>{details}</Descriptions> */}
           </ScrollView>
 
-          <Button
-            title="Adcionar ao Carrinho"
-            light
-            onPress={() => {
-              handleAddToCart(product.product_id);
-            }}
-          />
-          <Button
-            title="Remover do Carrinho"
-            light
-            onPress={() => {
-              handleRemoveToCart(product.product_id);
-            }}
-          />
+          <ContainerButtonAddOrRemove>
+            <ButtonOrAndRemove
+              sizeButton={50}
+              sizeIcon={30}
+              type="add"
+              onPress={() => {
+                handleAddToCart(product.product_id, product.price);
+              }}
+            />
+            <ButtonOrAndRemove
+              sizeButton={50}
+              sizeIcon={30}
+              type="remove"
+              onPress={() => {
+                handleRemoveToCart(product.product_id, product.price);
+              }}
+            />
+          </ContainerButtonAddOrRemove>
           <Button title="Tenho interesse" light onPress={redirectToWhatsapp} />
         </ContainerDescriptions>
       </Content>

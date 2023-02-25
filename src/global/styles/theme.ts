@@ -12,6 +12,10 @@ export default {
     alert: '#FFFF00',
     alert_light: '#9ACD32',
 
+    google_red: '#db4437',
+    google_yellow: '#FFC107',
+    google_blue: '#4285F4',
+
     shape: '#FFFFFF',
     title: '#363F5F',
     text: '#969CB2',
