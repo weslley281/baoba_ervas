@@ -64,9 +64,7 @@ export function Profile() {
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
           setIsLoading(true);
-          const response = await api.get(
-            `https://appbaoba.herokuapp.com/clients/email/${user.email}`
-          );
+          const response = await api.get(`clients/email/${user.email}`);
           setPhone(response.data.phone);
           setName(response.data.name);
           setEmail(response.data.email);
@@ -166,8 +164,9 @@ export function Profile() {
 
     if ((await isRegisteredEmail(user.email)) > 0) {
       console.log('Executou esse');
+      console.log(obj);
       await api
-        .post('https://appbaoba.herokuapp.com/clients/create', obj)
+        .post('clients/update', obj)
         .then(() => {
           setTimeout(() => {
             Alert.alert('Alerta', 'Alterado com sucesso');
