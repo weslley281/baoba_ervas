@@ -5,5 +5,5 @@ export const api = axios.create({
   //casa
   // baseURL: 'http://192.168.24.132:5000',
   //serviço
-  baseURL: 'https://appbaoba.herokuapp.com',
+  baseURL: 'https://appbaoba.herokuapp.com/',
 });

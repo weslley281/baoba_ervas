@@ -27,13 +27,13 @@ interface User {
   name: string;
   phone: string;
   email: string;
-  id_google: string;
+  client_id: string;
   birthday: Date;
 }
 
 export function Profile() {
   const { signOut, user } = useAuth();
-  const [id, setId] = useState(user.id);
+  const [client_id, setClient_id] = useState(user.id);
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(user.email);
@@ -44,39 +44,49 @@ export function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
 
+  async function isRegisteredEmail(email: string) {
+    try {
+      const searsh_email = await api.get(`clients/email/${email}`);
+      return searsh_email.data.id;
+    } catch (error) {
+      console.log(`Não foi possivel buscar email: ${error}`);
+      return 0;
+    }
+  }
+
   async function listData() {
     try {
-      const searsh_email = await api.get(
-        `https://appbaoba.herokuapp.com/clients/email/${user.email}`
+      console.log(`https://appbaoba.herokuapp.com/clients/email/${user.email}`);
+
+      console.log(
+        `O primeiro retorno é: ${await isRegisteredEmail(user.email)}`
       );
-      console.log(`O primeiro retorno é: ${searsh_email}`);
-      // if (searsh_email.data.success == true) {
-      //   try {
-      //     setIsLoading(true);
-      //     const response = await api.get(
-      //       `https://appbaoba.herokuapp.com/clients/email/${user.email}`
-      //     );
-
-      //     setPhone(response.data.phone);
-      //     setName(response.data.name);
-      //     setEmail(response.data.email);
-      //     setBirthday(response.data.birthday);
-      //     setId(response.data.id_google);
-
-      //     console.log('esse é o aniver: ' + birthday);
-      //     const arrayBirthday = birthday.toString().split('-');
-      //     const day = arrayBirthday[2];
-      //     const month = arrayBirthday[1];
-      //     const year = arrayBirthday[0];
-      //     const dateFormated = `${day}/${month}/${year}`;
-      //     console.log('esse é o aniver formatado: ' + dateFormated);
-      //     setDate(dateFormated);
-      //   } catch (error) {
-      //     console.log(error);
-      //   } finally {
-      //     setIsLoading(false);
-      //   }
-      // }
+      if ((await isRegisteredEmail(user.email)) > 0) {
+        try {
+          setIsLoading(true);
+          const response = await api.get(
+            `https://appbaoba.herokuapp.com/clients/email/${user.email}`
+          );
+          setPhone(response.data.phone);
+          setName(response.data.name);
+          setEmail(response.data.email);
+          setBirthday(response.data.birthday);
+          setClient_id(response.data.client_id);
+          console.log('esse é o aniver do servidor: ' + response.data.birthday);
+          console.log('esse é o aniver: ' + birthday);
+          const arrayBirthday = birthday.toString().split('-');
+          const day = arrayBirthday[2];
+          const month = arrayBirthday[1];
+          const year = arrayBirthday[0];
+          const dateFormated = `${day}/${month}/${year}`;
+          console.log('esse é o aniver formatado: ' + dateFormated);
+          setDate(dateFormated);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -146,49 +156,47 @@ export function Profile() {
     }
 
     const obj = {
-      id: id,
+      client_id: client_id,
       name: name,
       phone: phone,
       birthday: dataFormatada,
       email: user.email,
     };
-    console.log(obj);
+    // console.log(obj);
 
-    const searsh_email = await api.get(
-      `https://appbaoba.herokuapp.com/clients/email/${user.email}`
-    );
-    console.log(`O retorno foi esse ${searsh_email}`);
-    // if (searsh_email.data.lengh > 0) {
-    //   console.log('Executou esse');
-    //   await api
-    //     .post('https://appbaoba.herokuapp.com/clients/create', obj)
-    //     .then(() => {
-    //       setTimeout(() => {
-    //         Alert.alert('Alerta', 'Alterado com sucesso');
-    //       }, 1500);
-    //     })
-    //     .catch((error) => Alert.alert('Erro', error));
-    // } else {
-    //   await api
-    //     .post('clients/insert_client.php', obj)
-    //     .then(() => {
-    //       setTimeout(() => {
-    //         Alert.alert('Alerta', 'Alterado com sucesso');
-    //       }, 1500);
-    //     })
-    //     .catch((error) => Alert.alert('Erro', error));
-    // }
+    if ((await isRegisteredEmail(user.email)) > 0) {
+      console.log('Executou esse');
+      await api
+        .post('https://appbaoba.herokuapp.com/clients/create', obj)
+        .then(() => {
+          setTimeout(() => {
+            Alert.alert('Alerta', 'Alterado com sucesso');
+          }, 1500);
+        })
+        .catch((error) => Alert.alert('Erro', error));
+    } else {
+      console.log('Executou esse outro');
+      console.log(obj);
+      await api
+        .post('clients/create', obj)
+        .then(() => {
+          setTimeout(() => {
+            Alert.alert('Alerta', 'Alterado com sucesso');
+          }, 1500);
+        })
+        .catch((error) => Alert.alert('Erro', error));
+    }
   }
 
-  useEffect(() => {
-    listData();
-    console.log(data);
-  }, []);
+  // useEffect(() => {
+  //   listData();
+  //   // console.log(data);
+  // }, []);
 
   useEffect(() => {
     listData();
-    console.log(data);
-  }, [isFocused]);
+    // console.log(data);
+  }, [isFocused, birthday]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
