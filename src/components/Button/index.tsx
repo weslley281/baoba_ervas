@@ -7,7 +7,7 @@ interface Props extends TouchableOpacityProps {
   title: string;
   color?: string;
   onPress: () => void;
-  light?: boolean;
+  light: 'true' | 'false';
   icon?: string;
 }
 

@@ -26,11 +26,6 @@ export const Logo = styled.Image`
   border-radius: 10px;
 `;
 
-export const ContainerButton = styled.View`
-  margin-top: 5px;
-  width: 90%;
-`;
-
 export const ContainerTitle = styled.View`
   width: 100%;
   height: ${RFValue(60)}px;
@@ -49,9 +44,4 @@ export const Slogan = styled.Text`
   color: ${({ theme }) => theme.colors.shape};
   font-size: ${RFValue(15)}px;
   text-align: center;
-`;
-
-export const Footer = styled.View`
-  width: 90%;
-  margin-bottom: 5px;
 `;

@@ -164,7 +164,7 @@ export function Register() {
 
               <Button
                 title="Enviar"
-                light
+                light="true"
                 onPress={() => {
                   handleRegister();
                 }}

@@ -14,8 +14,6 @@ import {
   Logo,
   Slogan,
   Title,
-  ContainerButton,
-  Footer,
 } from './styles';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
@@ -45,14 +43,6 @@ export function Dashboard() {
         <ContainerTitle>
           <Title>Clube Baobá</Title>
           <Slogan>Um clube de ofertas, sorteios e saúde.</Slogan>
-
-          <ContainerButton>
-            <Button
-              title="Faça o seu Cadastro"
-              color={theme.colors.shape}
-              onPress={handleScreenRegister}
-            />
-          </ContainerButton>
         </ContainerTitle>
       </Header>
 
@@ -64,14 +54,6 @@ export function Dashboard() {
           <CardPromotion data={item} onPress={() => {}} />
         )}
       />
-
-      <Footer>
-        <Button
-          title="Ver todos os Produtos"
-          onPress={handleScreenProducts}
-          light
-        />
-      </Footer>
     </Container>
   );
 }

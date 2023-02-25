@@ -45,63 +45,68 @@ export function Profile() {
   const isFocused = useIsFocused();
 
   async function listData() {
-    const searsh_email = await api.get(
-      `clients/searsh_cliente_email.php?email=${email}`
-    );
-    if (searsh_email.data.success == true) {
-      try {
-        setIsLoading(true);
-        const response = await api.get(
-          `clients/searsh_cliente_email.php?email=${user.email}`
-        );
+    try {
+      const searsh_email = await api.get(
+        `https://appbaoba.herokuapp.com/clients/email/${user.email}`
+      );
+      console.log(`O primeiro retorno é: ${searsh_email}`);
+      // if (searsh_email.data.success == true) {
+      //   try {
+      //     setIsLoading(true);
+      //     const response = await api.get(
+      //       `https://appbaoba.herokuapp.com/clients/email/${user.email}`
+      //     );
 
-        setPhone(response.data.phone);
-        setName(response.data.name);
-        setEmail(response.data.email);
-        setBirthday(response.data.birthday);
-        setId(response.data.id_google);
+      //     setPhone(response.data.phone);
+      //     setName(response.data.name);
+      //     setEmail(response.data.email);
+      //     setBirthday(response.data.birthday);
+      //     setId(response.data.id_google);
 
-        console.log('esse é o aniver: ' + birthday);
-        const arrayBirthday = birthday.toString().split('-');
-        const day = arrayBirthday[2];
-        const month = arrayBirthday[1];
-        const year = arrayBirthday[0];
-        const dateFormated = `${day}/${month}/${year}`;
-        console.log('esse é o aniver formatado: ' + dateFormated);
-        setDate(dateFormated);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
+      //     console.log('esse é o aniver: ' + birthday);
+      //     const arrayBirthday = birthday.toString().split('-');
+      //     const day = arrayBirthday[2];
+      //     const month = arrayBirthday[1];
+      //     const year = arrayBirthday[0];
+      //     const dateFormated = `${day}/${month}/${year}`;
+      //     console.log('esse é o aniver formatado: ' + dateFormated);
+      //     setDate(dateFormated);
+      //   } catch (error) {
+      //     console.log(error);
+      //   } finally {
+      //     setIsLoading(false);
+      //   }
+      // }
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  async function bringResultsOfUser() {
-    const response = await api.get(
-      `clients/searsh_cliente_email.php?email=${user.email}`
-    );
-    if (response.data.success == true) {
-      try {
-        setData(response.data.resultado);
+  // async function bringResultsOfUser() {
+  //   const response = await api.get(
+  //     `clients/searsh_cliente_email.php?email=${user.email}`
+  //   );
+  //   if (response.data.success == true) {
+  //     try {
+  //       setData(response.data.resultado);
 
-        data.map((item) => {
-          setName(item.name);
-          setPhone(item.phone);
-          setEmail(item.email);
-          setId(item.id_google);
-          setBirthday(item.birthday);
-        });
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      console.log('Não deu certo');
-    }
-  }
+  //       data.map((item) => {
+  //         setName(item.name);
+  //         setPhone(item.phone);
+  //         setEmail(item.email);
+  //         setId(item.id_google);
+  //         setBirthday(item.birthday);
+  //       });
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   } else {
+  //     console.log('Não deu certo');
+  //   }
+  // }
 
   async function handleRegister() {
     const arrayOfName = name!.split(' ');
@@ -150,29 +155,29 @@ export function Profile() {
     console.log(obj);
 
     const searsh_email = await api.get(
-      `clients/searsh_cliente_email.php?email=${email}`
+      `https://appbaoba.herokuapp.com/clients/email/${user.email}`
     );
-    if (searsh_email.data.success == true) {
-      console.log('Executou esse');
-      await api
-        .post('clients/insert_existing_client.php', obj)
-        .then(() => {
-          setTimeout(() => {
-            Alert.alert('Alerta', 'Alterado com sucesso');
-          }, 1500);
-        })
-        .catch((error) => Alert.alert('Erro', error));
-    } else {
-      console.log('Executou esse outro');
-      await api
-        .post('clients/insert_client.php', obj)
-        .then(() => {
-          setTimeout(() => {
-            Alert.alert('Alerta', 'Alterado com sucesso');
-          }, 1500);
-        })
-        .catch((error) => Alert.alert('Erro', error));
-    }
+    console.log(`O retorno foi esse ${searsh_email}`);
+    // if (searsh_email.data.lengh > 0) {
+    //   console.log('Executou esse');
+    //   await api
+    //     .post('https://appbaoba.herokuapp.com/clients/create', obj)
+    //     .then(() => {
+    //       setTimeout(() => {
+    //         Alert.alert('Alerta', 'Alterado com sucesso');
+    //       }, 1500);
+    //     })
+    //     .catch((error) => Alert.alert('Erro', error));
+    // } else {
+    //   await api
+    //     .post('clients/insert_client.php', obj)
+    //     .then(() => {
+    //       setTimeout(() => {
+    //         Alert.alert('Alerta', 'Alterado com sucesso');
+    //       }, 1500);
+    //     })
+    //     .catch((error) => Alert.alert('Erro', error));
+    // }
   }
 
   useEffect(() => {
@@ -184,13 +189,6 @@ export function Profile() {
     listData();
     console.log(data);
   }, [isFocused]);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log('buscou os dados');
-  //     bringResultsOfUser();
-  //   }, [])
-  // );
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
@@ -209,7 +207,6 @@ export function Profile() {
             <Form>
               <Input
                 autoComplete="name"
-                name="name"
                 placeholder="Nome Completo"
                 value={name}
                 onChangeText={(text: string) => setName(text)}
@@ -241,17 +238,15 @@ export function Profile() {
 
               <Input
                 autoComplete="email"
-                name="email"
                 placeholder="Email"
                 autoCapitalize="none"
                 value={email}
                 onChangeText={(text: string) => setEmail(text)}
-                disabled
               />
 
               <Button
                 title="Alterar"
-                light
+                light="true"
                 onPress={() => {
                   handleRegister();
                 }}

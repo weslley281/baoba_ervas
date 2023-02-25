@@ -7,7 +7,7 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 interface ButtonTextProps {
-  light: boolean;
+  light: 'true' | 'false';
 }
 
 export const Container = styled(TouchableOpacity)<ButtonProps>`
@@ -22,5 +22,5 @@ export const Title = styled.Text<ButtonTextProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(14)}px;
   color: ${({ theme, light }) =>
-    light ? theme.colors.shape : theme.colors.text_dark};
+    light == 'true' ? theme.colors.shape : theme.colors.text_dark};
 `;

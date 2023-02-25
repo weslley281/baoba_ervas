@@ -94,7 +94,11 @@ export function ProductDetail() {
               }}
             />
           </ContainerButtonAddOrRemove>
-          <Button title="Tenho interesse" light onPress={redirectToWhatsapp} />
+          <Button
+            title="Tenho interesse"
+            light="true"
+            onPress={redirectToWhatsapp}
+          />
         </ContainerDescriptions>
       </Content>
     </Container>
