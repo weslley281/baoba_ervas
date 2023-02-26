@@ -59,8 +59,8 @@ export function Cart() {
                   </ContainerImage>
 
                   <ContainerText>
-                    <TextCart>{product.name}</TextCart>
-                    <TextCart>{product.value}</TextCart>
+                    <TextCart firstChild={true}>{product.name}</TextCart>
+                    <TextCart firstChild={false}>{product.value}</TextCart>
                   </ContainerText>
                 </ContainerProduct>
               );

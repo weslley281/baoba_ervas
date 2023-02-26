@@ -1,6 +1,10 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
+interface marginProps {
+  firstChild: boolean;
+}
+
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
@@ -44,11 +48,12 @@ export const ContainerText = styled.View`
   flex-direction: row;
 `;
 
-export const TextCart = styled.Text`
+export const TextCart = styled.Text<marginProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(13)}px;
   color: ${({ theme }) => theme.colors.shape};
   margin-left: 10px;
+  margin-left: ${({ firstChild }) => (firstChild ? '0px' : '10px')};
 `;
 
 export const ContainerCart = styled.ScrollView``;
