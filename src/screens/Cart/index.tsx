@@ -1,40 +1,41 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Button } from '../../components/Button';
 
-import { Container, ContainerCart, Header, Title } from './styles';
+import {
+  Container,
+  ContainerCart,
+  ContainerImage,
+  ContainerProduct,
+  ContainerText,
+  Header,
+  ImageCart,
+  TextCart,
+  Title,
+} from './styles';
+import { CartContext } from '../../contexts/CartContext';
 
 import { api } from '../../services/api';
-import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-
-interface User {
-  name: string;
-  phone: string;
-  email: string;
-  client_id: string;
-  birthday: Date;
-}
 
 export function Cart() {
   const { signOut, user } = useAuth();
-  const [client_id, setClient_id] = useState(user.id);
-  const [date, setDate] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState(user.email);
-  const [name, setName] = useState(user.fullName);
-  const [birthday, setBirthday] = useState(new Date());
-  const [data, setData] = useState<User[]>([]);
-  const { navigate, goBack } = useNavigation<any>();
-  const [isLoading, setIsLoading] = useState(false);
-  const isFocused = useIsFocused();
+  const { productsCart } = useContext(CartContext);
+
+  async function BringDataOfProductByID<ProductsProps>(product_id: number) {
+    try {
+      const searshProduct = await api.get(`products/product/${product_id}`);
+      return searshProduct.data;
+    } catch (error) {
+      console.log('Não foi possivel buscar dados dos produtos');
+      return '';
+    }
+  }
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
@@ -50,6 +51,21 @@ export function Cart() {
           </Header>
 
           <ContainerCart>
+            {productsCart.map((product) => {
+              return (
+                <ContainerProduct key={product.id}>
+                  <ContainerImage>
+                    <ImageCart source={{ uri: product.photo }} />
+                  </ContainerImage>
+
+                  <ContainerText>
+                    <TextCart>{product.name}</TextCart>
+                    <TextCart>{product.value}</TextCart>
+                  </ContainerText>
+                </ContainerProduct>
+              );
+            })}
+
             <Button title="Alterar" light="true" onPress={() => {}} />
           </ContainerCart>
         </Container>

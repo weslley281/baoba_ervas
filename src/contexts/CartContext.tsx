@@ -1,10 +1,21 @@
 import { createContext, useState, ReactNode } from 'react';
 
-type Product = { id: number; qtd: number; value: number };
+type Product = {
+  id: number;
+  qtd: number;
+  value: number;
+  name: string;
+  photo: string;
+};
 
 type CartContextType = {
   productsCart: Product[];
-  addProductToCart: (id: number, value: number) => void;
+  addProductToCart: (
+    id: number,
+    value: number,
+    name: string,
+    photo: string
+  ) => void;
   removeProductToCart: (id: number, value: number) => void;
   clearCart: () => void;
 };
@@ -18,13 +29,18 @@ export const CartContext = createContext({} as CartContextType);
 export default function CartProvider({ children }: CartProviderProps) {
   const [productsCart, setProductsCart] = useState<Product[]>([]);
 
-  function addProductToCart(id: number, value: number) {
+  function addProductToCart(
+    id: number,
+    value: number,
+    name: string,
+    photo: string
+  ) {
     const copyProductsCart = [...productsCart];
 
     const item = copyProductsCart.find((product) => product.id === id);
 
     if (!item) {
-      copyProductsCart.push({ id: id, qtd: 1, value: value });
+      copyProductsCart.push({ id: id, qtd: 1, value, name, photo });
     } else {
       item.qtd += 1;
       item.value += value;

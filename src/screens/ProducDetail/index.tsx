@@ -42,8 +42,13 @@ export function ProductDetail() {
     );
   }
 
-  function handleAddToCart(id: number, value: number) {
-    addProductToCart(id, value);
+  function handleAddToCart(
+    id: number,
+    value: number,
+    name: string,
+    photo: string
+  ) {
+    addProductToCart(id, value, name, photo);
   }
 
   function handleRemoveToCart(id: number, value: number) {
@@ -80,17 +85,22 @@ export function ProductDetail() {
             <ButtonOrAndRemove
               sizeButton={50}
               sizeIcon={30}
-              type="add"
+              type="remove"
               onPress={() => {
-                handleAddToCart(product.product_id, product.price);
+                handleRemoveToCart(product.product_id, product.price);
               }}
             />
             <ButtonOrAndRemove
               sizeButton={50}
               sizeIcon={30}
-              type="remove"
+              type="add"
               onPress={() => {
-                handleRemoveToCart(product.product_id, product.price);
+                handleAddToCart(
+                  product.product_id,
+                  product.price,
+                  product.name,
+                  product.image
+                );
               }}
             />
           </ContainerButtonAddOrRemove>

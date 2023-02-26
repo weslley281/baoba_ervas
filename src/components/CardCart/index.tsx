@@ -4,8 +4,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import { CartContext } from '../../contexts/CartContext';
 
 export function CardCart() {
-  const { productsCart, addProductToCart, removeProductToCart, clearCart } =
-    useContext(CartContext);
+  const { productsCart } = useContext(CartContext);
 
   const totalItems = productsCart.reduce(
     (accumulator, product) => accumulator + product.qtd,

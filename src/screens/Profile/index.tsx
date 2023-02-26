@@ -39,8 +39,6 @@ export function Profile() {
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
   const [birthday, setBirthday] = useState(new Date());
-  const [data, setData] = useState<User[]>([]);
-  const { navigate, goBack } = useNavigation<any>();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
 
@@ -89,32 +87,6 @@ export function Profile() {
       console.log(error);
     }
   }
-
-  // async function bringResultsOfUser() {
-  //   const response = await api.get(
-  //     `clients/searsh_cliente_email.php?email=${user.email}`
-  //   );
-  //   if (response.data.success == true) {
-  //     try {
-  //       setData(response.data.resultado);
-
-  //       data.map((item) => {
-  //         setName(item.name);
-  //         setPhone(item.phone);
-  //         setEmail(item.email);
-  //         setId(item.id_google);
-  //         setBirthday(item.birthday);
-  //       });
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   } else {
-  //     console.log('Não deu certo');
-  //   }
-  // }
 
   async function handleRegister() {
     const arrayOfName = name!.split(' ');
@@ -187,14 +159,8 @@ export function Profile() {
     }
   }
 
-  // useEffect(() => {
-  //   listData();
-  //   // console.log(data);
-  // }, []);
-
   useEffect(() => {
     listData();
-    // console.log(data);
   }, [isFocused, birthday]);
 
   return (
