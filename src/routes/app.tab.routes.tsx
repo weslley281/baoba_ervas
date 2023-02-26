@@ -9,6 +9,7 @@ import { SignIn } from '../screens/SignIn';
 import { Profile } from '../screens/Profile';
 import { AppStackProductsRoutes } from './app.stackProducts.routes';
 import { AppStackProfileRoutes } from './app.stackProfile.routes';
+import { AppStackCartRoutes } from './app.stackCart.routes';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -58,15 +59,19 @@ export function AppTabRoutes() {
         }}
       />
 
-      {/* <Screen
-        name="SignIn"
-        component={SignIn}
+      <Screen
+        name="Carrinho"
+        component={AppStackCartRoutes}
         options={{
           tabBarIcon: () => (
-            <Feather name="users" size={24} color={theme.colors.primary} />
+            <Feather
+              name="shopping-cart"
+              size={24}
+              color={theme.colors.primary}
+            />
           ),
         }}
-      /> */}
+      />
     </Navigator>
   );
 }
