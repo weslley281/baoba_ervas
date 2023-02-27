@@ -34,6 +34,7 @@ import { CartContext } from '../../contexts/CartContext';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
 import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
+import { api } from '../../services/api';
 
 export function Cart() {
   const { signOut, user } = useAuth();
@@ -42,31 +43,52 @@ export function Cart() {
 
   const [cardNumber, setCardNumber] = useState(4242424242424242);
   const [expiryMonth, setExpiryMonth] = useState(12);
-  const [expiryYear, setExpiryYear] = useState(32);
+  const [expiryYear, setExpiryYear] = useState(23);
+  const [installments, setInstallments] = useState(2);
+  const [object, setObject] = useState('card');
+  const [amount, setAmount] = useState(20000);
+  const [description, setDescription] = useState('teste de implementação');
   const [cvc, setCvc] = useState(123);
+  const [currency, setCurrency] = useState('brl');
+  // const [source, setSource] = useState({
+  //   object,
+  //   number: cardNumber,
+  //   exp_month: expiryMonth,
+  //   exp_year: expiryYear,
+  //   cvc,
+  //   installments,
+  // });
 
   const handlePayment = async () => {
-    const host1 = 'https://apibaoba.herokuapp.com';
-    const host2 = 'http://localhost:5000';
-    const response = await fetch(`${host2}/payments/stripe`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        cardNumber,
-        expiryMonth,
-        expiryYear,
+    Alert.alert('Clicou', 'Clicando');
+    console.log('------------------------CLicou------------------');
+    const obj = {
+      amount,
+      currency,
+      description,
+      source: {
+        object,
+        number: cardNumber,
+        exp_month: expiryMonth,
+        exp_year: expiryYear,
         cvc,
-        amount: 2000, // valor da transação em centavos de reais
-        currency: 'brl',
-        description: 'Exemplo de pagamento com Stripe',
-      }),
-    });
+        installments,
+      },
+    };
 
-    const result = await response.json();
+    console.log(obj);
 
-    console.log(result);
+    await api
+      .post('payments/stripe', obj)
+      .then(() => {
+        setTimeout(() => {
+          Alert.alert('Alerta', 'Venda efetuada com sucesso');
+        }, 1500);
+      })
+      .catch((error: any) => {
+        Alert.alert('Erro', error);
+        console.log(`Erro = ${error}`);
+      });
   };
 
   const totalItems = productsCart.reduce(
@@ -161,7 +183,7 @@ export function Cart() {
               title="Comprar"
               light="true"
               onPress={() => {
-                handlePayment;
+                handlePayment();
               }}
             />
           </Footer>
