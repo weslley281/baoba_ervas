@@ -1,7 +1,9 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { TextInputProps } from 'react-native';
+import { TextInputMask, TextInputMaskProps } from 'react-native-masked-text';
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
@@ -65,7 +67,7 @@ export const ContainerCart = styled.ScrollView`
   padding: 10px 10px;
 `;
 
-export const Footer = styled.View`
+export const Footer = styled.ScrollView`
   width: 100%;
   padding: 10px 0;
 `;
@@ -77,4 +79,42 @@ export const TextFooter = styled.Text`
   margin-left: 10px;
 `;
 
-export const Form = styled.View``;
+export const Form = styled.View`
+  width: 100%;
+`;
+
+export const MeddiemForm = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const SmallForm = styled.View`
+  width: 48%;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const BigInput = styled.TextInput<TextInputProps>`
+  width: 100%;
+  padding: 20px 10px;
+  background-color: ${({ theme }) => theme.colors.shape};
+  border-radius: 8px;
+  margin: 5px;
+`;
+
+export const InputMasckedCard = styled(TextInputMask)`
+  width: 100%;
+  padding: 20px 10px;
+  background-color: ${({ theme }) => theme.colors.shape};
+  border-radius: 8px;
+  margin: 5px;
+`;
+
+export const MeddiumInput = styled(TextInputMask)<TextInputMaskProps>`
+  width: 90%;
+  padding: 20px 10px;
+  background-color: ${({ theme }) => theme.colors.shape};
+  border-radius: 8px;
+  margin: 5px;
+`;

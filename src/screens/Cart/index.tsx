@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import PayPal from 'react-native-paypal-wrapper';
+import { TextInputMask } from 'react-native-masked-text';
 import { Button } from '../../components/Button';
 
 import {
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import {
+  BigInput,
   Container,
   ContainerAddOrRemove,
   ContainerCart,
@@ -17,8 +18,13 @@ import {
   ContainerProduct,
   ContainerText,
   Footer,
+  Form,
   Header,
   ImageCart,
+  InputMasckedCard,
+  MeddiemForm,
+  MeddiumInput,
+  SmallForm,
   TextCart,
   TextFooter,
   Title,
@@ -28,33 +34,61 @@ import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
 import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
 import { api } from '../../services/api';
+import { Mask } from 'react-native-svg';
 
 export function Cart() {
   const { signOut, user } = useAuth();
   const { productsCart, addProductToCart, removeProductToCart } =
     useContext(CartContext);
 
-  const [cardNumber, setCardNumber] = useState(4242424242424242);
-  const [expiryMonth, setExpiryMonth] = useState(12);
-  const [expiryYear, setExpiryYear] = useState(23);
-  const [installments, setInstallments] = useState(2);
+  const [cardNumber, setCardNumber] = useState(0);
+  const [expiryMonth, setExpiryMonth] = useState(0);
+  const [expiryYear, setExpiryYear] = useState(0);
+  const [installments, setInstallments] = useState(0);
   const [object, setObject] = useState('card');
-  const [amount, setAmount] = useState(20000);
-  const [description, setDescription] = useState('teste de implementação');
-  const [cvc, setCvc] = useState(123);
+  const [amount, setAmount] = useState(0);
+  const [description, setDescription] = useState('Compra geral');
+  const [cvc, setCvc] = useState(0);
   const [currency, setCurrency] = useState('brl');
-  // const [source, setSource] = useState({
-  //   object,
-  //   number: cardNumber,
-  //   exp_month: expiryMonth,
-  //   exp_year: expiryYear,
-  //   cvc,
-  //   installments,
-  // });
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState(0);
+
+  const totalItems = productsCart.reduce(
+    (accumulator, product) => accumulator + product.qtd,
+    0
+  );
+
+  const totalItemsValue = productsCart.reduce(
+    (accumulator, product) => accumulator + product.value,
+    0
+  );
 
   const handlePayment = async () => {
-    Alert.alert('Clicou', 'Clicando');
+    setAmount(totalItemsValue);
     console.log('------------------------CLicou------------------');
+
+    if (
+      cardNumber === 0 ||
+      expiryMonth === 0 ||
+      expiryMonth <= 0 ||
+      expiryMonth > 12 ||
+      expiryYear === 0 ||
+      installments === 0 ||
+      amount === 0 ||
+      cpf === 0 ||
+      cvc === 0 ||
+      name === ''
+    ) {
+      console.log(`cardNumber = ${cardNumber}`);
+      console.log(`expiryMonth = ${expiryMonth}`);
+      console.log(`expiryYear = ${expiryYear}`);
+      console.log(`installments = ${installments}`);
+      console.log(`cpf = ${cpf}`);
+      console.log(`cvc = ${cvc}`);
+      console.log(`name = ${name}`);
+      return Alert.alert('Erro', 'Preencha todos os campos');
+    }
+
     const obj = {
       amount,
       currency,
@@ -71,18 +105,6 @@ export function Cart() {
 
     console.log(obj);
 
-    // await api
-    //   .post('payments/stripe', obj)
-    //   .then(() => {
-    //     setTimeout(() => {
-    //       Alert.alert('Alerta', 'Venda efetuada com sucesso');
-    //     }, 1500);
-    //   })
-    //   .catch((error: any) => {
-    //     Alert.alert('Erro', error);
-    //     console.log(`Erro = ${error}`);
-    //   });
-
     try {
       const response = await api.post('payments/stripe', obj);
       console.log(response.data);
@@ -92,16 +114,6 @@ export function Cart() {
       Alert.alert('Erro', error.message);
     }
   };
-
-  const totalItems = productsCart.reduce(
-    (accumulator, product) => accumulator + product.qtd,
-    0
-  );
-
-  const totalItemsValue = productsCart.reduce(
-    (accumulator, product) => accumulator + product.value,
-    0
-  );
 
   const totalItemsValueFormatted = totalItemsValue
     .toFixed(2)
@@ -122,81 +134,143 @@ export function Cart() {
     removeProductToCart(id, value);
   }
 
+  function changeDate(text: string) {
+    const date = text.split('/');
+    setExpiryMonth(Number(date[0]));
+    setExpiryYear(Number(date[1]));
+  }
+
+  function handleCardNumberChange(text: any) {
+    const cleanedText = text.replace(/\s+/g, ''); // remove espaços em branco da string
+    setCardNumber(Number(cleanedText));
+  }
+
+  function handleCpf(text: any) {
+    const cleanedText = text.replace(/[^\d]/g, ''); // remove espaços em branco da string
+    setCpf(Number(cleanedText));
+  }
+
   return (
-    <KeyboardAvoidingView behavior="height" enabled>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <ContainerUser
-            name={user.name}
-            photo={user.photo!}
-            signOut={signOut}
-          />
-          <Header>
-            <Title>Meus Produtos</Title>
-          </Header>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <ContainerUser name={user.name} photo={user.photo!} signOut={signOut} />
+        <Header>
+          <Title>Meus Produtos</Title>
+        </Header>
 
-          <ContainerCart>
-            {productsCart.map((product) => {
-              const priceFormated = product.value
-                .toFixed(2)
-                .toString()
-                .replace('.', ',');
-              const priceFixed = product.value / product.qtd;
+        <ContainerCart>
+          {productsCart.map((product) => {
+            const priceFormated = product.value
+              .toFixed(2)
+              .toString()
+              .replace('.', ',');
+            const priceFixed = product.value / product.qtd;
 
-              return (
-                <ContainerProduct key={product.id}>
-                  <ContainerImage>
-                    <ImageCart source={{ uri: product.photo }} />
-                  </ContainerImage>
+            return (
+              <ContainerProduct key={product.id}>
+                <ContainerImage>
+                  <ImageCart source={{ uri: product.photo }} />
+                </ContainerImage>
 
-                  <ContainerText>
-                    <TextCart>
-                      {product.name} - {product.qtd} und - R$ {priceFormated}
-                    </TextCart>
-                  </ContainerText>
-                  <ContainerAddOrRemove>
-                    <ButtonOrAndRemove
-                      sizeButton={35}
-                      sizeIcon={20}
-                      type="add"
-                      onPress={() => {
-                        handleAddToCart(
-                          product.id,
-                          priceFixed,
-                          priceFixed,
-                          product.name,
-                          product.photo
-                        );
-                      }}
-                    />
-                    <ButtonOrAndRemove
-                      sizeButton={35}
-                      sizeIcon={20}
-                      type="remove"
-                      onPress={() => {
-                        handleRemoveToCart(product.id, product.valueFixed);
-                      }}
-                    />
-                  </ContainerAddOrRemove>
-                </ContainerProduct>
-              );
-            })}
+                <ContainerText>
+                  <TextCart>
+                    {product.name} - {product.qtd} und - R$ {priceFormated}
+                  </TextCart>
+                </ContainerText>
+                <ContainerAddOrRemove>
+                  <ButtonOrAndRemove
+                    sizeButton={35}
+                    sizeIcon={20}
+                    type="add"
+                    onPress={() => {
+                      handleAddToCart(
+                        product.id,
+                        priceFixed,
+                        priceFixed,
+                        product.name,
+                        product.photo
+                      );
+                    }}
+                  />
+                  <ButtonOrAndRemove
+                    sizeButton={35}
+                    sizeIcon={20}
+                    type="remove"
+                    onPress={() => {
+                      handleRemoveToCart(product.id, product.valueFixed);
+                    }}
+                  />
+                </ContainerAddOrRemove>
+              </ContainerProduct>
+            );
+          })}
 
-            <Footer>
-              <TextFooter>Quantidade de itens = {totalItems}</TextFooter>
-              <TextFooter>Total ={totalItemsValueFormatted}</TextFooter>
+          <Footer>
+            <TextFooter>Quantidade de itens = {totalItems}</TextFooter>
+            <TextFooter>Total ={totalItemsValueFormatted}</TextFooter>
 
-              <Button
-                title="Comprar"
-                light="true"
-                onPress={() => {
-                  handlePayment();
-                }}
+            <Form>
+              <TextFooter>Nome:</TextFooter>
+              <BigInput
+                onChangeText={(text: string) => setName(text)}
+                value={name}
+                placeholder="fulano de tal"
               />
-            </Footer>
-          </ContainerCart>
-        </Container>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+
+              <TextFooter>Numero do Cartão:</TextFooter>
+              <InputMasckedCard
+                type={'credit-card'}
+                placeholder="4242 4242 4242 4242"
+                onChangeText={(text) => handleCardNumberChange(text)}
+              />
+
+              <MeddiemForm>
+                <SmallForm>
+                  <TextFooter>Data:</TextFooter>
+                  <MeddiumInput
+                    type="custom"
+                    options={{ mask: '99/99' }}
+                    onChangeText={(text) => changeDate(text)}
+                    placeholder="12/24"
+                  />
+                </SmallForm>
+                <SmallForm>
+                  <TextFooter>Cvc:</TextFooter>
+                  <MeddiumInput
+                    type="custom"
+                    options={{ mask: '999' }}
+                    onChangeText={(text) => setCvc(Number(text))}
+                    maxLength={16}
+                    placeholder="123"
+                  />
+                </SmallForm>
+              </MeddiemForm>
+
+              <TextFooter>Cpf:</TextFooter>
+              <InputMasckedCard
+                type="cpf"
+                onChangeText={(text) => handleCpf(text)}
+                maxLength={16}
+                placeholder="000.000.000-00"
+              />
+
+              <TextFooter>Numero de Parcelas:</TextFooter>
+              <BigInput
+                onChangeText={(text: string) => setInstallments(Number(text))}
+                placeholder=""
+              />
+            </Form>
+
+            <Button
+              title="Comprar"
+              light="true"
+              onPress={() => {
+                handlePayment();
+              }}
+            />
+          </Footer>
+        </ContainerCart>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
