@@ -4,6 +4,7 @@ type Product = {
   id: number;
   qtd: number;
   value: number;
+  valueFixed: number;
   name: string;
   photo: string;
 };
@@ -13,6 +14,7 @@ type CartContextType = {
   addProductToCart: (
     id: number,
     value: number,
+    valueFixed: number,
     name: string,
     photo: string
   ) => void;
@@ -32,6 +34,7 @@ export default function CartProvider({ children }: CartProviderProps) {
   function addProductToCart(
     id: number,
     value: number,
+    valueFixed: number,
     name: string,
     photo: string
   ) {
@@ -40,7 +43,7 @@ export default function CartProvider({ children }: CartProviderProps) {
     const item = copyProductsCart.find((product) => product.id === id);
 
     if (!item) {
-      copyProductsCart.push({ id: id, qtd: 1, value, name, photo });
+      copyProductsCart.push({ id: id, qtd: 1, value, name, photo, valueFixed });
     } else {
       item.qtd += 1;
       item.value += value;

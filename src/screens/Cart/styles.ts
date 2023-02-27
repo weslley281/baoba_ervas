@@ -1,10 +1,6 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
-interface marginProps {
-  firstChild: boolean;
-}
-
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
@@ -28,6 +24,10 @@ export const ContainerProduct = styled.View`
   background-color: ${({ theme }) => theme.colors.alert_light};
   border-radius: 8px;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+  margin: 3px 0;
 `;
 
 export const ContainerImage = styled.View`
@@ -43,17 +43,38 @@ export const ImageCart = styled.Image`
 `;
 
 export const ContainerText = styled.View`
-  width: 100%;
-  padding: ${RFValue(20)}px;
+  width: 60%;
   flex-direction: row;
+  align-items: center;
 `;
 
-export const TextCart = styled.Text<marginProps>`
+export const ContainerAddOrRemove = styled.View`
+  width: 20%;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const TextCart = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(13)}px;
   color: ${({ theme }) => theme.colors.shape};
   margin-left: 10px;
-  margin-left: ${({ firstChild }) => (firstChild ? '0px' : '10px')};
 `;
 
-export const ContainerCart = styled.ScrollView``;
+export const ContainerCart = styled.ScrollView`
+  padding: 10px 10px;
+`;
+
+export const Footer = styled.View`
+  width: 100%;
+  padding: 10px 0;
+`;
+
+export const TextFooter = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${RFValue(13)}px;
+  color: ${({ theme }) => theme.colors.text_dark};
+  margin-left: 10px;
+`;
+
+export const Form = styled.View``;

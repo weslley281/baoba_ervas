@@ -45,10 +45,11 @@ export function ProductDetail() {
   function handleAddToCart(
     id: number,
     value: number,
+    valueFixed: number,
     name: string,
     photo: string
   ) {
-    addProductToCart(id, value, name, photo);
+    addProductToCart(id, value, valueFixed, name, photo);
   }
 
   function handleRemoveToCart(id: number, value: number) {
@@ -97,6 +98,7 @@ export function ProductDetail() {
               onPress={() => {
                 handleAddToCart(
                   product.product_id,
+                  product.price,
                   product.price,
                   product.name,
                   product.image
