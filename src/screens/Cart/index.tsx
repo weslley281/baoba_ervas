@@ -1,20 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 // import PayPal from 'react-native-paypal-wrapper';
-import { Provider as PaperProvider } from 'react-native-paper';
 import { Button } from '../../components/Button';
 
 import Stripe from 'stripe';
 import { Token } from '@stripe/stripe-js';
 
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
-import MercadoPagoCheckout from '@blackbox-vision/react-native-mercadopago-px';
-
-import { Appbar } from 'react-native-paper';
-import { Elements, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { NativeModules } from 'react-native';
 
-import { Alert } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import {
   Container,
@@ -130,74 +128,80 @@ export function Cart() {
   }
 
   return (
-    <PaperProvider>
-      <Container>
-        <ContainerUser name={user.name} photo={user.photo!} signOut={signOut} />
-        <Header>
-          <Title>Meus Produtos</Title>
-        </Header>
+    <KeyboardAvoidingView behavior="height" enabled>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <ContainerUser
+            name={user.name}
+            photo={user.photo!}
+            signOut={signOut}
+          />
+          <Header>
+            <Title>Meus Produtos</Title>
+          </Header>
 
-        <ContainerCart>
-          {productsCart.map((product) => {
-            const priceFormated = product.value
-              .toFixed(2)
-              .toString()
-              .replace('.', ',');
-            const priceFixed = product.value / product.qtd;
+          <ContainerCart>
+            {productsCart.map((product) => {
+              const priceFormated = product.value
+                .toFixed(2)
+                .toString()
+                .replace('.', ',');
+              const priceFixed = product.value / product.qtd;
 
-            return (
-              <ContainerProduct key={product.id}>
-                <ContainerImage>
-                  <ImageCart source={{ uri: product.photo }} />
-                </ContainerImage>
+              return (
+                <ContainerProduct key={product.id}>
+                  <ContainerImage>
+                    <ImageCart source={{ uri: product.photo }} />
+                  </ContainerImage>
 
-                <ContainerText>
-                  <TextCart>
-                    {product.name} - {product.qtd} und - R$ {priceFormated}
-                  </TextCart>
-                </ContainerText>
-                <ContainerAddOrRemove>
-                  <ButtonOrAndRemove
-                    sizeButton={35}
-                    sizeIcon={20}
-                    type="add"
-                    onPress={() => {
-                      handleAddToCart(
-                        product.id,
-                        priceFixed,
-                        priceFixed,
-                        product.name,
-                        product.photo
-                      );
-                    }}
-                  />
-                  <ButtonOrAndRemove
-                    sizeButton={35}
-                    sizeIcon={20}
-                    type="remove"
-                    onPress={() => {
-                      handleRemoveToCart(product.id, product.valueFixed);
-                    }}
-                  />
-                </ContainerAddOrRemove>
-              </ContainerProduct>
-            );
-          })}
+                  <ContainerText>
+                    <TextCart>
+                      {product.name} - {product.qtd} und - R$ {priceFormated}
+                    </TextCart>
+                  </ContainerText>
+                  <ContainerAddOrRemove>
+                    <ButtonOrAndRemove
+                      sizeButton={35}
+                      sizeIcon={20}
+                      type="add"
+                      onPress={() => {
+                        handleAddToCart(
+                          product.id,
+                          priceFixed,
+                          priceFixed,
+                          product.name,
+                          product.photo
+                        );
+                      }}
+                    />
+                    <ButtonOrAndRemove
+                      sizeButton={35}
+                      sizeIcon={20}
+                      type="remove"
+                      onPress={() => {
+                        handleRemoveToCart(product.id, product.valueFixed);
+                      }}
+                    />
+                  </ContainerAddOrRemove>
+                </ContainerProduct>
+              );
+            })}
 
-          <Footer>
-            <TextFooter>Quantidade de itens = {totalItems}</TextFooter>
-            <TextFooter>Total ={totalItemsValueFormatted}</TextFooter>
+            <Footer>
+              <TextFooter>Quantidade de itens = {totalItems}</TextFooter>
+              <TextFooter>Total ={totalItemsValueFormatted}</TextFooter>
 
-            <Button
-              title="Comprar"
-              light="true"
-              onPress={() => {
-                handlePayment();
-              }}
-            />
-          </Footer>
-        </ContainerCart>
-      </Container>
-    </PaperProvider>
+              <Button
+                title="Comprar"
+                light="true"
+                onPress={() => {
+                  handlePayment();
+                }}
+              />
+            </Footer>
+          </ContainerCart>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
