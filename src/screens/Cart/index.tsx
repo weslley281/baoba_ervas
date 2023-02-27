@@ -78,17 +78,26 @@ export function Cart() {
 
     console.log(obj);
 
-    await api
-      .post('payments/stripe', obj)
-      .then(() => {
-        setTimeout(() => {
-          Alert.alert('Alerta', 'Venda efetuada com sucesso');
-        }, 1500);
-      })
-      .catch((error: any) => {
-        Alert.alert('Erro', error);
-        console.log(`Erro = ${error}`);
-      });
+    // await api
+    //   .post('payments/stripe', obj)
+    //   .then(() => {
+    //     setTimeout(() => {
+    //       Alert.alert('Alerta', 'Venda efetuada com sucesso');
+    //     }, 1500);
+    //   })
+    //   .catch((error: any) => {
+    //     Alert.alert('Erro', error);
+    //     console.log(`Erro = ${error}`);
+    //   });
+
+    try {
+      const response = await api.post('payments/stripe', obj);
+      console.log(response.data);
+      Alert.alert('Alerta', 'Venda efetuada com sucesso');
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Erro', error.message);
+    }
   };
 
   const totalItems = productsCart.reduce(
