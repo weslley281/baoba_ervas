@@ -2,11 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 // import PayPal from 'react-native-paypal-wrapper';
 import { Button } from '../../components/Button';
 
-import Stripe from 'stripe';
-import { Token } from '@stripe/stripe-js';
-
-import { loadStripe } from '@stripe/stripe-js';
-
 import {
   Alert,
   Keyboard,
