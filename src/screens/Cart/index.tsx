@@ -52,6 +52,7 @@ export function Cart() {
   const [currency, setCurrency] = useState('brl');
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState(0);
+  const [type_delivery, setType_delivery] = useState('Retirar na loja');
   // const [addressLine1, setAddressLine1] = useState('');
   // const [addressLine2, setAddressLine2] = useState('');
   // const [city, setCity] = useState('');
@@ -76,8 +77,6 @@ export function Cart() {
     if (
       cardNumber === 0 ||
       expiryMonth === 0 ||
-      expiryMonth <= 0 ||
-      expiryMonth > 12 ||
       expiryYear === 0 ||
       installments === 0 ||
       amount === 0 ||
@@ -102,6 +101,7 @@ export function Cart() {
       amount: amount * 100,
       currency,
       description,
+      type_delivery,
       source: {
         object,
         number: cardNumber.toString(),
