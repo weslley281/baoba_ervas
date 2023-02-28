@@ -52,6 +52,12 @@ export function Cart() {
   const [currency, setCurrency] = useState('brl');
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState(0);
+  // const [addressLine1, setAddressLine1] = useState('');
+  // const [addressLine2, setAddressLine2] = useState('');
+  // const [city, setCity] = useState('');
+  // const [state, setState] = useState('');
+  // const [postalCode, setPostalCode] = useState('');
+  // const [country, setCountry] = useState('');
 
   const totalItems = productsCart.reduce(
     (accumulator, product) => accumulator + product.qtd,
@@ -90,15 +96,18 @@ export function Cart() {
     }
 
     const obj = {
-      amount,
+      user_id: user.id,
+      user_email: user.email,
+      user_name: user.name,
+      amount: amount * 100,
       currency,
       description,
       source: {
         object,
-        number: cardNumber,
-        exp_month: expiryMonth,
-        exp_year: expiryYear,
-        cvc,
+        number: cardNumber.toString(),
+        exp_month: expiryMonth.toString(),
+        exp_year: expiryYear.toString(),
+        cvc: cvc.toString(),
         installments,
       },
     };
