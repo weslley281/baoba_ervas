@@ -35,6 +35,7 @@ import { ContainerUser } from '../../components/ContainerUser';
 import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
 import { api } from '../../services/api';
 import { Mask } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 
 export function Cart() {
   const { signOut, user } = useAuth();
@@ -46,7 +47,7 @@ export function Cart() {
   const [expiryYear, setExpiryYear] = useState(0);
   const [installments, setInstallments] = useState(0);
   const [object, setObject] = useState('card');
-  const [amount, setAmount] = useState(0);
+
   const [description, setDescription] = useState('Compra geral');
   const [cvc, setCvc] = useState(0);
   const [currency, setCurrency] = useState('brl');
@@ -60,6 +61,8 @@ export function Cart() {
   // const [postalCode, setPostalCode] = useState('');
   // const [country, setCountry] = useState('');
 
+  const { navigate } = useNavigation<any>();
+
   const totalItems = productsCart.reduce(
     (accumulator, product) => accumulator + product.qtd,
     0
@@ -70,8 +73,11 @@ export function Cart() {
     0
   );
 
+  const [amount, setAmount] = useState(totalItemsValue);
+
   const handlePayment = async () => {
     setAmount(totalItemsValue);
+    const amountFormatted = Math.round(amount * 100);
     console.log('------------------------CLicou------------------');
 
     if (
@@ -84,13 +90,13 @@ export function Cart() {
       cvc === 0 ||
       name === ''
     ) {
-      console.log(`cardNumber = ${cardNumber}`);
-      console.log(`expiryMonth = ${expiryMonth}`);
-      console.log(`expiryYear = ${expiryYear}`);
-      console.log(`installments = ${installments}`);
-      console.log(`cpf = ${cpf}`);
-      console.log(`cvc = ${cvc}`);
-      console.log(`name = ${name}`);
+      // console.log(`cardNumber = ${cardNumber}`);
+      // console.log(`expiryMonth = ${expiryMonth}`);
+      // console.log(`expiryYear = ${expiryYear}`);
+      // console.log(`installments = ${installments}`);
+      // console.log(`cpf = ${cpf}`);
+      // console.log(`cvc = ${cvc}`);
+      // console.log(`name = ${name}`);
       return Alert.alert('Erro', 'Preencha todos os campos');
     }
 
@@ -98,7 +104,7 @@ export function Cart() {
       user_id: user.id,
       user_email: user.email,
       user_name: user.name,
-      amount: amount * 100,
+      amount: amountFormatted,
       currency,
       description,
       type_delivery,
@@ -118,6 +124,7 @@ export function Cart() {
       const response = await api.post('payments/stripe', obj);
       console.log(response.data);
       Alert.alert('Alerta', 'Venda efetuada com sucesso');
+      navigate('Checkout');
     } catch (error: any) {
       console.log(error);
       Alert.alert('Erro', error.message);
@@ -270,11 +277,19 @@ export function Cart() {
               />
             </Form>
 
-            <Button
+            {/* <Button
               title="Comprar"
               light="true"
               onPress={() => {
                 handlePayment();
+              }}
+            /> */}
+
+            <Button
+              title="Comprar"
+              light="true"
+              onPress={() => {
+                navigate('Checkout');
               }}
             />
           </Footer>
