@@ -23,6 +23,18 @@ import {
   Title,
 } from './styles';
 
+interface Response {
+  data: {
+    client_id: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+}
+
 export function Checkout() {
   const { signOut, user } = useAuth();
   const [addressLine1, setAddressLine1] = useState('');
@@ -33,6 +45,38 @@ export function Checkout() {
   const [country, setCountry] = useState('');
 
   const { navigate } = useNavigation<any>();
+
+  async function isRegisteredAddress(client_id: string) {
+    try {
+      const searsh_address = await api.get(`address/list/${client_id}`);
+      return searsh_address.data.id;
+    } catch (error) {
+      console.log(`Não foi possivel buscar Endereço: ${error}`);
+      return 0;
+    }
+  }
+
+  async function listData() {
+    try {
+      if ((await isRegisteredAddress(user.id)) > 0) {
+        try {
+          const response: Response = await api.get(
+            `clients/email/${user.email}`
+          );
+          setAddressLine1(response.data.addressLine1);
+          setAddressLine2(response.data.addressLine2);
+          setCity(response.data.city);
+          setState(response.data.state);
+          setPostalCode(response.data.postalCode);
+          setCountry(response.data.country);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function handleSaveAddress() {
     if (
@@ -57,16 +101,32 @@ export function Checkout() {
 
     console.log(obj);
 
-    try {
-      const response = await api.post('payments/stripe', obj);
-      console.log(response.data);
-      Alert.alert('Alerta', 'Venda efetuada com sucesso');
-      navigate('Perfil');
-    } catch (error: any) {
-      console.log(error);
-      Alert.alert('Erro', error.message);
+    if ((await isRegisteredAddress(user.id)) > 0) {
+      try {
+        const response = await api.post('address/create', obj);
+        console.log(response.data);
+        Alert.alert('Alerta', 'Endereço criado com sucesso');
+        navigate('Perfil');
+      } catch (error: any) {
+        console.log(error);
+        Alert.alert('Erro', error.message);
+      }
+    } else {
+      try {
+        const response = await api.post('address/update', obj);
+        console.log(response.data);
+        Alert.alert('Alerta', 'Endereço alterado com sucesso');
+        navigate('Perfil');
+      } catch (error: any) {
+        console.log(error);
+        Alert.alert('Erro', error.message);
+      }
     }
   }
+
+  useEffect(() => {
+    listData();
+  }, [addressLine1, addressLine2, city, state, country, postalCode]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
@@ -130,9 +190,9 @@ export function Checkout() {
               <Button
                 title="Alterar"
                 light="true"
-                // onPress={() => {
-                //   handleRegister();
-                // }}
+                onPress={() => {
+                  handleSaveAddress();
+                }}
               />
             </Form>
           </ContainerForm>

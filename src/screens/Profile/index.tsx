@@ -21,7 +21,6 @@ import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 interface User {
   name: string;
@@ -40,7 +39,6 @@ export function Profile() {
   const [name, setName] = useState(user.fullName);
   const [birthday, setBirthday] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
-  const isFocused = useIsFocused();
 
   async function isRegisteredEmail(email: string) {
     try {
@@ -54,11 +52,6 @@ export function Profile() {
 
   async function listData() {
     try {
-      console.log(`https://appbaoba.herokuapp.com/clients/email/${user.email}`);
-
-      console.log(
-        `O primeiro retorno é: ${await isRegisteredEmail(user.email)}`
-      );
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
           setIsLoading(true);
@@ -161,7 +154,7 @@ export function Profile() {
 
   useEffect(() => {
     listData();
-  }, [isFocused, birthday]);
+  }, [birthday]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
