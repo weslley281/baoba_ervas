@@ -16,6 +16,7 @@ export const Container = styled(TouchableOpacity)<ButtonProps>`
   border-radius: 5px;
   align-items: center;
   padding: 18px;
+  margin-top: 15px;
 `;
 
 export const Title = styled.Text<ButtonTextProps>`

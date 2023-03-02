@@ -3,7 +3,11 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+
+interface Selected {
+  isActive: boolean;
+}
 
 export const Container = styled(GestureHandlerRootView)`
   flex: 1;
@@ -26,15 +30,18 @@ export const Title = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled.TouchableOpacity`
+export const TypeOfDelivery = styled.TouchableOpacity<Selected>`
   width: 100%;
   padding: ${RFValue(15)}px;
 
   flex-direction: row;
   align-items: center;
+
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.colors.alert : 'white'};
 `;
 
-export const Icon = styled(FontAwesome5)`
+export const Icon = styled(MaterialIcons)`
   font-size: ${RFValue(20)}px;
   margin-right: 16px;
 `;

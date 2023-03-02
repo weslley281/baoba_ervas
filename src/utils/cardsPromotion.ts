@@ -32,13 +32,13 @@ export const cardsPromotion = [
     title: 'Sexta dos Doces',
     slogan: 'Cristalizados, doces biscoitos e mel',
     image:
-      'https://baobabrasil.com.br/wp-content/uploads/2022/06/doces-324x324.jpg',
+      'https://cdn.pixabay.com/photo/2016/11/28/10/30/cookie-1864674_960_720.jpg',
   },
   {
     id: 6,
     title: 'Sabado dos Temperos',
     slogan: 'Temperos, condimentos, pimentas e açucares',
     image:
-      'https://baobabrasil.com.br/wp-content/uploads/2022/06/sementes-324x324.jpg',
+      'https://cdn.pixabay.com/photo/2018/01/03/06/19/sugar-3057660_960_720.jpg',
   },
 ];

@@ -18,20 +18,15 @@ import {
 } from './styles';
 
 import { api } from '../../services/api';
-import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
-
-interface User {
-  name: string;
-  phone: string;
-  email: string;
-  client_id: string;
-  birthday: Date;
-}
+import { useTheme } from 'styled-components';
+import { useNavigation } from '@react-navigation/native';
 
 export function Profile() {
   const { signOut, user } = useAuth();
+  const theme = useTheme();
+  const { navigate } = useNavigation<any>();
   const [client_id, setClient_id] = useState(user.id);
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
@@ -206,6 +201,13 @@ export function Profile() {
                 onPress={() => {
                   handleRegister();
                 }}
+              />
+
+              <Button
+                color={theme.colors.alert_light}
+                light="true"
+                title="Alterar o Endereço"
+                onPress={() => navigate('Checkout')}
               />
             </Form>
           </ContainerForm>

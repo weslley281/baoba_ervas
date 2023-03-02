@@ -3,7 +3,7 @@ import { FlatList } from 'react-native';
 import { Button } from '../../components/Button';
 import { categories } from '../../utils/categories';
 import {
-  Category,
+  TypeOfDelivery,
   Container,
   Header,
   Icon,
@@ -12,34 +12,31 @@ import {
   Title,
 } from './styles';
 
-interface Category {
+interface TypeOfDelivery {
   key: string;
   name: string;
 }
 
 interface Props {
-  category: Category;
-  setCategory: (category: Category) => void;
-  setSearchText: any;
-  closeSelectCategory: () => void;
+  typeOfDelivery: TypeOfDelivery;
+  setTypeOfDelivery: (typeOfDelivery: TypeOfDelivery) => void;
+  closeSelectTypeOfDelivery: () => void;
 }
 
-export function CategorySelect({
-  category,
-  setCategory,
-  setSearchText,
-  closeSelectCategory,
+export function TypeOfDeliverySelect({
+  typeOfDelivery,
+  setTypeOfDelivery,
+  closeSelectTypeOfDelivery,
 }: Props) {
-  function handleCategorySelect(category: Category) {
-    closeSelectCategory();
-    setCategory(category);
-    setSearchText('');
+  function handleTypeOfDeliverySelect(typeOfDelivery: TypeOfDelivery) {
+    closeSelectTypeOfDelivery();
+    setTypeOfDelivery(typeOfDelivery);
   }
 
   return (
     <Container>
       <Header>
-        <Title>Categoria</Title>
+        <Title>Tipo de Entrega</Title>
       </Header>
 
       <FlatList
@@ -47,10 +44,13 @@ export function CategorySelect({
         style={{ flex: 1, width: '100%' }}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => (
-          <Category onPress={() => handleCategorySelect(item)}>
+          <TypeOfDelivery
+            onPress={() => handleTypeOfDeliverySelect(item)}
+            isActive={typeOfDelivery.key === item.key}
+          >
             <Icon name={item.icon} />
             <Name>{item.name}</Name>
-          </Category>
+          </TypeOfDelivery>
         )}
         ItemSeparatorComponent={() => <Separator />}
       />
