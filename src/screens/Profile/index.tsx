@@ -131,7 +131,7 @@ export function Profile() {
       console.log('Executou esse');
       console.log(obj);
       await api
-        .post('clients/update', obj)
+        .put('clients/update', obj)
         .then(() => {
           setTimeout(() => {
             Alert.alert('Alerta', 'Alterado com sucesso');
