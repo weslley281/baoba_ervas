@@ -40,9 +40,9 @@ export function Checkout() {
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
   const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [state, setState] = useState('Mato Grosso');
   const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('Brasil');
 
   const { navigate } = useNavigation<any>();
 
@@ -100,9 +100,11 @@ export function Checkout() {
     };
 
     console.log(obj);
+    console.log(`O email registraso é ${await isRegisteredAddress(user.id)}`);
 
-    if ((await isRegisteredAddress(user.id)) > 0) {
+    if ((await isRegisteredAddress(user.id)) == 0) {
       try {
+        console.log('Executou um Post');
         const response = await api.post('address/create', obj);
         console.log(response.data);
         Alert.alert('Alerta', 'Endereço criado com sucesso');
@@ -113,6 +115,7 @@ export function Checkout() {
       }
     } else {
       try {
+        console.log('Executou um Put');
         const response = await api.put('address/update', obj);
         console.log(response.data);
         Alert.alert('Alerta', 'Endereço alterado com sucesso');
@@ -126,15 +129,7 @@ export function Checkout() {
 
   useEffect(() => {
     listData();
-  }, [
-    addressLine1,
-    addressLine2,
-    city,
-    state,
-    country,
-    postalCode,
-    handleSaveAddress(),
-  ]);
+  }, []);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
@@ -155,34 +150,34 @@ export function Checkout() {
               <Input
                 autoComplete="street-address"
                 placeholder="Rua Funano de tal, 123"
-                // value={name}
-                // onChangeText={(text: string) => setName(text)}
+                value={addressLine1}
+                onChangeText={(text: string) => setAddressLine1(text)}
               />
 
               <Label>Linha 2:</Label>
               <Input
                 placeholder="Quadra 123, perto de algum lugar"
-                // value={name}
-                // onChangeText={(text: string) => setName(text)}
+                value={addressLine2}
+                onChangeText={(text: string) => setAddressLine2(text)}
               />
 
               <Label>Cidade:</Label>
               <Input
                 placeholder="Sua cidade"
-                // value={name}
-                // onChangeText={(text: string) => setName(text)}
+                value={city}
+                onChangeText={(text: string) => setCity(text)}
               />
 
               <Label>Estado:</Label>
               <Input
-                value="Mato Grosso"
-                // onChangeText={(text: string) => setName(text)}
+                value={state}
+                onChangeText={(text: string) => setState(text)}
               />
 
               <Label>País:</Label>
               <Input
-                value="Brasil"
-                // onChangeText={(text: string) => setName(text)}
+                value={country}
+                onChangeText={(text: string) => setCountry(text)}
               />
 
               <Label>Cep:</Label>
@@ -191,8 +186,8 @@ export function Checkout() {
                 placeholder="78000-000"
                 type="custom"
                 options={{ mask: '99999-999' }}
-                // value={phone}
-                // onChangeText={(text) => setPhone(text)}
+                value={postalCode}
+                onChangeText={(text) => setPostalCode(text)}
               />
 
               <Button
