@@ -38,7 +38,6 @@ export function Profile() {
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
   const [birthday, setBirthday] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(false);
 
   async function isRegisteredEmail(email: string) {
     try {
@@ -54,7 +53,6 @@ export function Profile() {
     try {
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
-          setIsLoading(true);
           const response = await api.get(`clients/email/${user.email}`);
           setPhone(response.data.phone);
           setName(response.data.name);
@@ -71,8 +69,6 @@ export function Profile() {
           setDate(dateFormated);
         } catch (error) {
           console.log(error);
-        } finally {
-          setIsLoading(false);
         }
       }
     } catch (error) {
