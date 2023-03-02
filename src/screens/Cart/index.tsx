@@ -277,19 +277,11 @@ export function Cart() {
               />
             </Form>
 
-            {/* <Button
-              title="Comprar"
-              light="true"
-              onPress={() => {
-                handlePayment();
-              }}
-            /> */}
-
             <Button
               title="Comprar"
               light="true"
               onPress={() => {
-                navigate('Checkout');
+                handlePayment();
               }}
             />
           </Footer>

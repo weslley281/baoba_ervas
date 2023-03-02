@@ -5,10 +5,6 @@ import styled from 'styled-components/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-interface Selected {
-  isActive: boolean;
-}
-
 export const Container = styled(GestureHandlerRootView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
@@ -30,14 +26,12 @@ export const Title = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled.TouchableOpacity<Selected>`
+export const Category = styled.TouchableOpacity`
   width: 100%;
   padding: ${RFValue(15)}px;
 
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.alert : 'white'};
 `;
 
 export const Icon = styled(FontAwesome5)`
