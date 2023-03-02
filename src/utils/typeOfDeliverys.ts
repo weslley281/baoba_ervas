@@ -1,4 +1,4 @@
-export const typeOfDelivery = [
+export const typeOfDeliverys = [
   {
     key: 'loja',
     name: 'Retirar na Loja',

@@ -6,6 +6,7 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
 
@@ -36,6 +37,8 @@ import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
 import { api } from '../../services/api';
 import { Mask } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
+import { TypeOfDeliverySelect } from '../TypeOfDeliverySelect';
+import { CategorySelectButton } from '../../components/CategorySelectButton';
 
 export function Cart() {
   const { signOut, user } = useAuth();
@@ -53,13 +56,17 @@ export function Cart() {
   const [currency, setCurrency] = useState('brl');
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState(0);
-  const [type_delivery, setType_delivery] = useState('Retirar na loja');
   // const [addressLine1, setAddressLine1] = useState('');
   // const [addressLine2, setAddressLine2] = useState('');
   // const [city, setCity] = useState('');
   // const [state, setState] = useState('');
   // const [postalCode, setPostalCode] = useState('');
   // const [country, setCountry] = useState('');
+  const [typeOfDeliveryModalOpen, setTypeOfDeliveryModalOpen] = useState(false);
+  const [type_delivery, setType_delivery] = useState({
+    key: 'loja',
+    name: 'Retirar na Loja',
+  });
 
   const { navigate } = useNavigation<any>();
 
@@ -164,6 +171,14 @@ export function Cart() {
   function handleCpf(text: any) {
     const cleanedText = text.replace(/[^\d]/g, ''); // remove espaços em branco da string
     setCpf(Number(cleanedText));
+  }
+
+  function handleOpenSelectTypeOfDeliveryModal() {
+    setTypeOfDeliveryModalOpen(true);
+  }
+
+  function handleCloseSelectTypeOfDeliveryModal() {
+    setTypeOfDeliveryModalOpen(false);
   }
 
   return (
@@ -275,6 +290,11 @@ export function Cart() {
                 onChangeText={(text: string) => setInstallments(Number(text))}
                 placeholder=""
               />
+
+              <CategorySelectButton
+                onPress={handleOpenSelectTypeOfDeliveryModal}
+                title={type_delivery.name}
+              />
             </Form>
 
             <Button
@@ -286,6 +306,14 @@ export function Cart() {
             />
           </Footer>
         </ContainerCart>
+
+        <Modal visible={typeOfDeliveryModalOpen}>
+          <TypeOfDeliverySelect
+            typeOfDelivery={type_delivery}
+            setTypeOfDelivery={setType_delivery}
+            closeSelectTypeOfDelivery={handleCloseSelectTypeOfDeliveryModal}
+          />
+        </Modal>
       </Container>
     </TouchableWithoutFeedback>
   );
