@@ -113,7 +113,7 @@ export function Checkout() {
       }
     } else {
       try {
-        const response = await api.post('address/update', obj);
+        const response = await api.put('address/update', obj);
         console.log(response.data);
         Alert.alert('Alerta', 'Endereço alterado com sucesso');
         navigate('Perfil');
@@ -126,7 +126,15 @@ export function Checkout() {
 
   useEffect(() => {
     listData();
-  }, [addressLine1, addressLine2, city, state, country, postalCode]);
+  }, [
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    country,
+    postalCode,
+    handleSaveAddress(),
+  ]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
