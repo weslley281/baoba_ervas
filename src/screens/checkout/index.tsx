@@ -40,16 +40,16 @@ export function Checkout() {
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
   const [city, setCity] = useState('');
-  const [state, setState] = useState('Mato Grosso');
+  const [state, setState] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('Brasil');
+  const [country, setCountry] = useState('');
 
   const { navigate } = useNavigation<any>();
 
   async function isRegisteredAddress(client_id: string) {
     try {
       const searsh_address = await api.get(`address/list/${client_id}`);
-      return searsh_address.data.id;
+      return searsh_address.data.client_id;
     } catch (error) {
       console.log(`Não foi possivel buscar Endereço: ${error}`);
       return 0;
@@ -60,9 +60,7 @@ export function Checkout() {
     try {
       if ((await isRegisteredAddress(user.id)) > 0) {
         try {
-          const response: Response = await api.get(
-            `clients/email/${user.email}`
-          );
+          const response: Response = await api.get(`address/list/${user.id}`);
           setAddressLine1(response.data.addressLine1);
           setAddressLine2(response.data.addressLine2);
           setCity(response.data.city);
@@ -72,6 +70,13 @@ export function Checkout() {
         } catch (error) {
           console.log(error);
         }
+      } else {
+        setAddressLine1('');
+        setAddressLine2('');
+        setCity('');
+        setState('Mato Grosso');
+        setPostalCode('');
+        setCountry('Brasil');
       }
     } catch (error) {
       console.log(error);
@@ -129,7 +134,7 @@ export function Checkout() {
 
   useEffect(() => {
     listData();
-  }, []);
+  }, [addressLine1]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
