@@ -18,6 +18,7 @@ interface CardProductsProps {
   onPress: () => void;
   onAddToCart: () => void;
 }
+
 export function Products() {
   const [products, setProducts] = useState<ProductsProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);

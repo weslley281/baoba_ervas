@@ -62,6 +62,11 @@ export function Cart() {
   // const [state, setState] = useState('');
   // const [postalCode, setPostalCode] = useState('');
   // const [country, setCountry] = useState('');
+  const [installmentModalOpen, setInstallmentModalOpen] = useState(false);
+  const [installment, setInstallment] = useState({
+    key: '1',
+    name: '1x',
+  });
   const [typeOfDeliveryModalOpen, setTypeOfDeliveryModalOpen] = useState(false);
   const [type_delivery, setType_delivery] = useState({
     key: 'loja',
@@ -114,7 +119,7 @@ export function Cart() {
       amount: amountFormatted,
       currency,
       description,
-      type_delivery,
+      type_delivery: type_delivery.key,
       source: {
         object,
         number: cardNumber.toString(),
@@ -179,6 +184,14 @@ export function Cart() {
 
   function handleCloseSelectTypeOfDeliveryModal() {
     setTypeOfDeliveryModalOpen(false);
+  }
+
+  function handleOpenSelectInstallmentModal() {
+    setInstallmentModalOpen(true);
+  }
+
+  function handleCloseSelectInstallmentModal() {
+    setInstallmentModalOpen(false);
   }
 
   return (
@@ -306,6 +319,14 @@ export function Cart() {
             />
           </Footer>
         </ContainerCart>
+
+        <Modal visible={installmentModalOpen}>
+          <TypeOfDeliverySelect
+            typeOfDelivery={type_delivery}
+            setTypeOfDelivery={setType_delivery}
+            closeSelectTypeOfDelivery={handleCloseSelectInstallmentModal}
+          />
+        </Modal>
 
         <Modal visible={typeOfDeliveryModalOpen}>
           <TypeOfDeliverySelect
