@@ -61,14 +61,13 @@ export function Profile() {
           setEmail(response.data.email);
           setBirthday(response.data.birthday);
           setClient_id(response.data.client_id);
-          console.log('esse é o aniver do servidor: ' + response.data.birthday);
-          console.log('esse é o aniver: ' + birthday);
+
           const arrayBirthday = birthday.toString().split('-');
           const day = arrayBirthday[2];
           const month = arrayBirthday[1];
           const year = arrayBirthday[0];
           const dateFormated = `${day}/${month}/${year}`;
-          console.log('esse é o aniver formatado: ' + dateFormated);
+
           setDate(dateFormated);
         } catch (error) {
           console.log(error);
@@ -125,11 +124,8 @@ export function Profile() {
       birthday: dataFormatada,
       email: user.email,
     };
-    // console.log(obj);
 
     if ((await isRegisteredEmail(user.email)) > 0) {
-      console.log('Executou esse');
-      console.log(obj);
       await api
         .put('clients/update', obj)
         .then(() => {
@@ -139,8 +135,6 @@ export function Profile() {
         })
         .catch((error) => Alert.alert('Erro', error));
     } else {
-      console.log('Executou esse outro');
-      console.log(obj);
       await api
         .post('clients/create', obj)
         .then(() => {
