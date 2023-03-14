@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Button } from '../../components/Button';
+import moment from 'moment';
 
 import {
   Container,
@@ -21,7 +23,8 @@ import { api } from '../../services/api';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
 import { useTheme } from 'styled-components';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { LoadContainer } from '../Products/styles';
 
 export function Profile() {
   const { signOut, user } = useAuth();
@@ -32,7 +35,9 @@ export function Profile() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
-  const [birthday, setBirthday] = useState(new Date());
+  const [birthday, setBirthday] = useState<Date | string>(new Date());
+  const [dateMoment, setDateMoment] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function isRegisteredEmail(email: string) {
     try {
@@ -46,28 +51,42 @@ export function Profile() {
 
   async function listData() {
     try {
+      setIsLoading(true);
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
           const response = await api.get(`clients/email/${user.email}`);
           setPhone(response.data.phone);
           setName(response.data.name);
           setEmail(response.data.email);
+
+          console.log(response.data.birthday);
+          console.log(birthday);
+
           setBirthday(response.data.birthday);
-          setClient_id(response.data.client_id);
+
+          // const dateMomentLocal = moment(response.data.birthday);
+          // const dateFormattedMoment = dateMomentLocal.format('DD/MM/YYYY');
+          const dateDB = new Date(response.data.birthday);
+          const dateDBFormatted = `${dateDB.getDate() + 1}/${
+            dateDB.getMonth() + 1
+          }/${dateDB.getFullYear()}`;
+          setDateMoment(dateDBFormatted);
 
           const arrayBirthday = birthday.toString().split('-');
           const day = arrayBirthday[2];
           const month = arrayBirthday[1];
           const year = arrayBirthday[0];
-          const dateFormated = `${day}/${month}/${year}`;
+          const dateFormatted = `${day}/${month}/${year}`;
 
-          setDate(dateFormated);
+          setDate(dateFormatted);
         } catch (error) {
           console.log(error);
         }
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -137,9 +156,15 @@ export function Profile() {
     }
   }
 
-  useEffect(() => {
-    listData();
-  }, [birthday]);
+  // useEffect(() => {
+  //   listData();
+  // }, [birthday]);
+
+  useFocusEffect(
+    useCallback(() => {
+      listData();
+    }, [])
+  );
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
@@ -154,63 +179,69 @@ export function Profile() {
             <Title>Meus Dados</Title>
           </Header>
 
-          <ContainerForm>
-            <Form>
-              <Input
-                autoComplete="name"
-                placeholder="Nome Completo"
-                value={name}
-                onChangeText={(text: string) => setName(text)}
-              />
+          {isLoading ? (
+            <LoadContainer>
+              <ActivityIndicator size="large" color={theme.colors.primary} />
+            </LoadContainer>
+          ) : (
+            <ContainerForm>
+              <Form>
+                <Input
+                  autoComplete="name"
+                  placeholder="Nome Completo"
+                  value={name}
+                  onChangeText={(text: string) => setName(text)}
+                />
 
-              <TextInputMasked
-                autoComplete="tel"
-                placeholder="Telefone"
-                type={'cel-phone'}
-                options={{
-                  maskType: 'BRL',
-                  withDDD: true,
-                  dddMask: '(99) ',
-                }}
-                value={phone}
-                onChangeText={(text) => setPhone(text)}
-              />
+                <TextInputMasked
+                  autoComplete="tel"
+                  placeholder="Telefone"
+                  type={'cel-phone'}
+                  options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) ',
+                  }}
+                  value={phone}
+                  onChangeText={(text) => setPhone(text)}
+                />
 
-              <TextInputMasked
-                autoComplete="birthdate-full"
-                placeholder="Data de Aniversário"
-                type={'datetime'}
-                options={{
-                  format: 'DD/MM/YYYY',
-                }}
-                value={date}
-                onChangeText={(text) => setDate(text)}
-              />
+                <TextInputMasked
+                  autoComplete="birthdate-full"
+                  placeholder="Data de Aniversário"
+                  type={'datetime'}
+                  options={{
+                    format: 'DD/MM/YYYY',
+                  }}
+                  value={dateMoment}
+                  onChangeText={(text) => setDate(text)}
+                />
 
-              <Input
-                autoComplete="email"
-                placeholder="Email"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={(text: string) => setEmail(text)}
-              />
+                <Input
+                  autoComplete="email"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  value={email}
+                  onChangeText={(text: string) => setEmail(text)}
+                />
 
-              <Button
-                title="Alterar"
-                light="true"
-                onPress={() => {
-                  handleRegister();
-                }}
-              />
+                <Button
+                  title="Alterar"
+                  light="true"
+                  onPress={() => {
+                    handleRegister();
+                  }}
+                />
 
-              <Button
-                color={theme.colors.alert_light}
-                light="true"
-                title="Alterar o Endereço"
-                onPress={() => navigate('Checkout')}
-              />
-            </Form>
-          </ContainerForm>
+                <Button
+                  color={theme.colors.alert_light}
+                  light="true"
+                  title="Alterar o Endereço"
+                  onPress={() => navigate('Checkout')}
+                />
+              </Form>
+            </ContainerForm>
+          )}
         </Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

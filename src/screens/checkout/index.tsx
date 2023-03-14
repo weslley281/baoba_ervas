@@ -49,7 +49,7 @@ export function Checkout() {
 
   async function isRegisteredAddress(client_id: string) {
     try {
-      const searsh_address = await api.get(`address/list/${client_id}`);
+      const searsh_address = await api.get(`address/search/${client_id}`);
       return searsh_address.data.client_id;
     } catch (error) {
       console.log(`Não foi possivel buscar Endereço: ${error}`);
@@ -59,9 +59,12 @@ export function Checkout() {
 
   async function listData() {
     try {
+      const teste = (await isRegisteredAddress(user.id)) > 0;
+      console.log(teste);
       if ((await isRegisteredAddress(user.id)) > 0) {
+        console.log('primeiro if');
         try {
-          const response: Response = await api.get(`address/list/${user.id}`);
+          const response: Response = await api.get(`address/search/${user.id}`);
           setAddressLine1(response.data.addressLine1);
           setAddressLine2(response.data.addressLine2);
           setCity(response.data.city);
@@ -73,6 +76,7 @@ export function Checkout() {
           console.log(error);
         }
       } else {
+        console.log('else');
         setAddressLine1('');
         setAddressLine2('');
         setCity('');
@@ -136,10 +140,16 @@ export function Checkout() {
     }
   }
 
-  useEffect(() => {
-    listData();
-    console.log(`Os dados de endereço1 é ${addressLine1}`);
-  }, [isloaded]);
+  // useEffect(() => {
+  //   listData();
+  //   console.log(`Os dados de endereço1 é ${addressLine1}`);
+  // }, [isloaded]);
+
+  useFocusEffect(
+    useCallback(() => {
+      listData();
+    }, [])
+  );
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
