@@ -43,6 +43,7 @@ export function Checkout() {
   const [state, setState] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('');
+  const [isloaded, setIsLoaded] = useState(false);
 
   const { navigate } = useNavigation<any>();
 
@@ -67,6 +68,7 @@ export function Checkout() {
           setState(response.data.state);
           setPostalCode(response.data.postalCode);
           setCountry(response.data.country);
+          setIsLoaded(true);
         } catch (error) {
           console.log(error);
         }
@@ -84,6 +86,8 @@ export function Checkout() {
   }
 
   async function handleSaveAddress() {
+    listData();
+
     if (
       addressLine1 === '' ||
       city === '' ||
@@ -107,7 +111,7 @@ export function Checkout() {
     console.log(obj);
     console.log(`O email registraso é ${await isRegisteredAddress(user.id)}`);
 
-    if ((await isRegisteredAddress(user.id)) == 0) {
+    if ((await isRegisteredAddress(user.id)) == undefined) {
       try {
         console.log('Executou um Post');
         const response = await api.post('address/create', obj);
@@ -134,7 +138,8 @@ export function Checkout() {
 
   useEffect(() => {
     listData();
-  }, [addressLine1]);
+    console.log(`Os dados de endereço1 é ${addressLine1}`);
+  }, [isloaded]);
 
   return (
     <KeyboardAvoidingView behavior="height" enabled>
