@@ -20,6 +20,12 @@ export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.shape};
 `;
 
+export const Text = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(18)}px;
+  color: ${({ theme }) => theme.colors.title};
+`;
+
 export const ScrollViewProducts = styled.ScrollView``;
 
 export const Form = styled.View`
