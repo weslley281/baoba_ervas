@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TextInputMask } from 'react-native-masked-text';
 import { Button } from '../../components/Button';
 
@@ -92,6 +92,15 @@ export function Cart() {
     const amountFormatted = Math.round(amount * 100);
     console.log('------------------------CLicou------------------');
 
+    console.log(`cardNumber = ${cardNumber}`);
+    console.log(`expiryMonth = ${expiryMonth}`);
+    console.log(`expiryYear = ${expiryYear}`);
+    console.log(`installments = ${installments}`);
+    console.log(`cpf = ${cpf}`);
+    console.log(`cvc = ${cvc}`);
+    console.log(`name = ${name}`);
+    console.log(`amount = ${amount}`);
+
     if (
       cardNumber === 0 ||
       expiryMonth === 0 ||
@@ -102,13 +111,6 @@ export function Cart() {
       cvc === 0 ||
       name === ''
     ) {
-      // console.log(`cardNumber = ${cardNumber}`);
-      // console.log(`expiryMonth = ${expiryMonth}`);
-      // console.log(`expiryYear = ${expiryYear}`);
-      // console.log(`installments = ${installments}`);
-      // console.log(`cpf = ${cpf}`);
-      // console.log(`cvc = ${cvc}`);
-      // console.log(`name = ${name}`);
       return Alert.alert('Erro', 'Preencha todos os campos');
     }
 

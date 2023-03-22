@@ -52,7 +52,7 @@ export function Profile() {
 
   async function listData() {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
           const response = await api.get(`clients/email/${user.email}`);
@@ -74,7 +74,7 @@ export function Profile() {
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -168,7 +168,11 @@ export function Profile() {
               <Title>Meus Dados</Title>
             </Header>
 
-            {changes ? (
+            {isLoading ? (
+              <LoadContainer>
+                <ActivityIndicator size="large" color={theme.colors.primary} />
+              </LoadContainer>
+            ) : changes ? (
               <ContainerForm>
                 <Form>
                   <Input
@@ -256,6 +260,13 @@ export function Profile() {
                     light="true"
                     title="Alterar o Endereço"
                     onPress={() => navigate('Checkout')}
+                  />
+
+                  <Button
+                    color={theme.colors.secondary}
+                    light="true"
+                    title="Minhas Compras"
+                    onPress={() => navigate('Orders')}
                   />
                 </Form>
               </ContainerForm>
