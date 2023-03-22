@@ -60,4 +60,15 @@ export const TextInputMasked = styled(TextInputMask)`
   margin-bottom: 5px;
 `;
 
-export const ContainerForm = styled.ScrollView``;
+export const ContainerButton = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+export const ContainerInformations = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+`;

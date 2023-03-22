@@ -11,13 +11,14 @@ import { Button } from '../../components/Button';
 
 import {
   Container,
-  ContainerForm,
+  ContainerButton,
   Form,
   Header,
   Input,
   TextInputMasked,
   Title,
   Text,
+  ContainerInformations,
 } from './styles';
 
 import { api } from '../../services/api';
@@ -26,6 +27,7 @@ import { ContainerUser } from '../../components/ContainerUser';
 import { useTheme } from 'styled-components';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { LoadContainer } from '../Products/styles';
+import { ButtonWithIcon } from '../../components/ButtonWithIcon';
 
 export function Profile() {
   const { signOut, user } = useAuth();
@@ -173,103 +175,95 @@ export function Profile() {
                 <ActivityIndicator size="large" color={theme.colors.primary} />
               </LoadContainer>
             ) : changes ? (
-              <ContainerForm>
-                <Form>
-                  <Input
-                    autoComplete="name"
-                    placeholder="Nome Completo"
-                    value={name}
-                    onChangeText={(text: string) => setName(text)}
+              <Form>
+                <Input
+                  autoComplete="name"
+                  placeholder="Nome Completo"
+                  value={name}
+                  onChangeText={(text: string) => setName(text)}
+                />
+
+                <TextInputMasked
+                  autoComplete="tel"
+                  placeholder="Telefone"
+                  type={'cel-phone'}
+                  options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) ',
+                  }}
+                  value={phone}
+                  onChangeText={(text) => setPhone(text)}
+                />
+
+                <TextInputMasked
+                  autoComplete="birthdate-full"
+                  placeholder="Data de Aniversário"
+                  type={'datetime'}
+                  options={{
+                    format: 'DD/MM/YYYY',
+                  }}
+                  value={dateMoment}
+                  onChangeText={(text) => setDate(text)}
+                />
+
+                <Input
+                  autoComplete="email"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  value={email}
+                  onChangeText={(text: string) => setEmail(text)}
+                />
+
+                <Button
+                  title="Alterar"
+                  light="true"
+                  onPress={() => {
+                    handleRegister();
+                  }}
+                />
+
+                <Button
+                  color={theme.colors.danger}
+                  title="Cancelar"
+                  light="true"
+                  onPress={() => {
+                    setChanges(false);
+                  }}
+                />
+
+                <Button
+                  color={theme.colors.alert_light}
+                  light="true"
+                  title="Alterar o Endereço"
+                  onPress={() => navigate('Checkout')}
+                />
+              </Form>
+            ) : (
+              <Form>
+                <ContainerButton>
+                  <ButtonWithIcon
+                    icon="user-edit"
+                    onPress={() => setChanges(true)}
                   />
 
-                  <TextInputMasked
-                    autoComplete="tel"
-                    placeholder="Telefone"
-                    type={'cel-phone'}
-                    options={{
-                      maskType: 'BRL',
-                      withDDD: true,
-                      dddMask: '(99) ',
-                    }}
-                    value={phone}
-                    onChangeText={(text) => setPhone(text)}
-                  />
-
-                  <TextInputMasked
-                    autoComplete="birthdate-full"
-                    placeholder="Data de Aniversário"
-                    type={'datetime'}
-                    options={{
-                      format: 'DD/MM/YYYY',
-                    }}
-                    value={dateMoment}
-                    onChangeText={(text) => setDate(text)}
-                  />
-
-                  <Input
-                    autoComplete="email"
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    value={email}
-                    onChangeText={(text: string) => setEmail(text)}
-                  />
-
-                  <Button
-                    title="Alterar"
-                    light="true"
-                    onPress={() => {
-                      handleRegister();
-                    }}
-                  />
-
-                  <Button
-                    color={theme.colors.danger}
-                    title="Cancelar"
-                    light="true"
-                    onPress={() => {
-                      setChanges(false);
-                    }}
-                  />
-
-                  <Button
-                    color={theme.colors.alert_light}
-                    light="true"
-                    title="Alterar o Endereço"
+                  <ButtonWithIcon
+                    icon="address-book"
                     onPress={() => navigate('Checkout')}
                   />
-                </Form>
-              </ContainerForm>
-            ) : (
-              <ContainerForm>
-                <Form>
+                  <ButtonWithIcon
+                    icon="box"
+                    onPress={() => navigate('Orders')}
+                  />
+                </ContainerButton>
+
+                <ContainerInformations>
                   <Text>Nome: {name}</Text>
                   <Text>Telefone: {phone}</Text>
                   <Text>Aniversário: {birthday}</Text>
                   <Text>Email: {email}</Text>
-
-                  <Button
-                    title="Alterar Dados Pessoais"
-                    light="true"
-                    onPress={() => {
-                      setChanges(true);
-                    }}
-                  />
-
-                  <Button
-                    color={theme.colors.alert_light}
-                    light="true"
-                    title="Alterar o Endereço"
-                    onPress={() => navigate('Checkout')}
-                  />
-
-                  <Button
-                    color={theme.colors.secondary}
-                    light="true"
-                    title="Minhas Compras"
-                    onPress={() => navigate('Orders')}
-                  />
-                </Form>
-              </ContainerForm>
+                </ContainerInformations>
+              </Form>
             )}
           </Container>
         </ScrollView>
