@@ -216,7 +216,7 @@ export function Profile() {
                 />
 
                 <Button
-                  title="Alterar"
+                  title="Salvar0"
                   light="true"
                   onPress={() => {
                     handleRegister();
@@ -230,13 +230,6 @@ export function Profile() {
                   onPress={() => {
                     setChanges(false);
                   }}
-                />
-
-                <Button
-                  color={theme.colors.alert_light}
-                  light="true"
-                  title="Alterar o Endereço"
-                  onPress={() => navigate('Checkout')}
                 />
               </Form>
             ) : (
