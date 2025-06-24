@@ -1,6 +1,6 @@
-import { TouchableOpacityProps } from 'react-native';
-import FontistoIcon from 'react-native-vector-icons/Fontisto';
-import { Container } from './styles';
+import React from 'react';
+import { TouchableOpacity, TouchableOpacityProps, StyleSheet, ViewStyle } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface ButtonProps extends TouchableOpacityProps {
   sizeButton: number;
@@ -17,12 +17,26 @@ export function ButtonOrAndRemove({
   ...rest
 }: ButtonProps) {
   return (
-    <Container size={sizeButton} onPress={onPress} {...rest}>
-      <FontistoIcon
-        name={type == 'add' ? 'shopping-basket-add' : 'shopping-basket-remove'}
+    <TouchableOpacity
+      style={[styles.button, { width: sizeButton, height: sizeButton }]}
+      activeOpacity={0.8}
+      onPress={onPress}
+      {...rest}
+    >
+      <MaterialIcons
+        name={type === 'add' ? 'add-shopping-cart' : 'remove-shopping-cart'}
         size={sizeIcon}
-        color="white"
+        color="#fff"
       />
-    </Container>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#145291',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+  } as ViewStyle,
+});
