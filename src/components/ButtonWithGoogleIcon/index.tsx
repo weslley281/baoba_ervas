@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacityProps } from 'react-native';
-import { Button, GoogleIcon, Text } from './styles';
+import { TouchableOpacity, TouchableOpacityProps, Text, StyleSheet } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 interface Props extends TouchableOpacityProps {
   title: string;
@@ -9,9 +9,27 @@ interface Props extends TouchableOpacityProps {
 
 export function ButtonWithGoogleIcon({ onPress, title, ...rest }: Props) {
   return (
-    <Button onPress={onPress} {...rest}>
-      <GoogleIcon />
+    <TouchableOpacity onPress={onPress} {...rest}>
+      <AntDesign name="google" size={24} color="black" />
       <Text>{title}</Text>
-    </Button>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: '100%',
+    backgroundColor: '#DB4437', // Google red
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    padding: 18,
+  },
+  text: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 22,
+    color: '#e4ee56', // Shape color
+    marginLeft: 10,
+  },
+});

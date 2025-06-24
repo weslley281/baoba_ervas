@@ -4,31 +4,20 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import { Button } from '../../components/Button';
-
-import {
-  Container,
-  ContainerForm,
-  Form,
-  Header,
-  Input,
-  TextInputMasked,
-  Title,
-} from './styles';
-
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 
-interface FormData {
-  name: string;
-  phone: string;
-  email: string;
-  cpf: string;
-  password: string;
-  birthday: Date;
-}
+// Substitua pelo seu componente de máscara ou use um pacote como react-native-masked-text
+import { TextInputMask } from 'react-native-masked-text';
 
 export function Register() {
   const { signOut, user } = useAuth();
@@ -106,7 +95,7 @@ export function Register() {
           Alert.alert('Alerta', 'Salvo com sucesso');
         }, 1500);
       })
-      .catch((error) => Alert.alert('Erro', error));
+      .catch((error: any) => Alert.alert('Erro', error));
     setName('');
     setPhone('');
     setDate('');
@@ -114,65 +103,107 @@ export function Register() {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" enabled>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+      enabled
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <Header>
-            <Title>Registro</Title>
-          </Header>
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Registro</Text>
+          </View>
 
-          <ContainerForm>
-            <Form>
-              <Input
+          <View style={styles.formContainer}>
+            <View style={styles.form}>
+              <TextInput
+                style={styles.input}
                 autoComplete="name"
                 placeholder="Nome Completo"
                 value={name}
-                onChangeText={(text: string) => setName(text)}
+                onChangeText={setName}
               />
 
-              <TextInputMasked
-                autoComplete="tel"
-                placeholder="Telefone"
+              <TextInputMask
+                style={styles.input}
                 type={'cel-phone'}
                 options={{
                   maskType: 'BRL',
                   withDDD: true,
                   dddMask: '(99) ',
                 }}
+                autoComplete="tel"
+                placeholder="Telefone"
                 value={phone}
-                onChangeText={(text) => setPhone(text)}
+                onChangeText={setPhone}
               />
 
-              <TextInputMasked
-                autoComplete="birthdate-full"
-                placeholder="Data de Aniversário"
+              <TextInputMask
+                style={styles.input}
                 type={'datetime'}
                 options={{
                   format: 'DD/MM/YYYY',
                 }}
+                autoComplete="birthdate-full"
+                placeholder="Data de Aniversário"
                 value={date}
-                onChangeText={(text) => setDate(text)}
+                onChangeText={setDate}
               />
 
-              <Input
+              <TextInput
+                style={styles.input}
                 autoComplete="email"
                 placeholder="Email"
                 autoCapitalize="none"
                 value={email}
-                onChangeText={(text: string) => setEmail(text)}
+                onChangeText={setEmail}
               />
 
               <Button
                 title="Enviar"
                 light="true"
-                onPress={() => {
-                  handleRegister();
-                }}
+                onPress={handleRegister}
               />
-            </Form>
-          </ContainerForm>
-        </Container>
+            </View>
+          </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    padding: 24,
+    justifyContent: 'center',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  formContainer: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    padding: 24,
+    elevation: 2,
+  },
+  form: {
+    width: '100%',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
+  },
+});

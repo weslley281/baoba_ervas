@@ -1,27 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Button } from '../../components/Button';
-
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/core';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import {
-  Container,
-  ContainerForm,
-  Form,
-  Header,
-  Input,
-  Label,
-  TextInputMasked,
-  Title,
-} from './styles';
+import { useFocusEffect } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text';
 
 interface Response {
   data: {
@@ -60,9 +55,7 @@ export function Checkout() {
   async function listData() {
     try {
       const teste = (await isRegisteredAddress(user.id)) > 0;
-      console.log(teste);
       if ((await isRegisteredAddress(user.id)) > 0) {
-        console.log('primeiro if');
         try {
           const response: Response = await api.get(`address/search/${user.id}`);
           setAddressLine1(response.data.addressLine1);
@@ -76,7 +69,6 @@ export function Checkout() {
           console.log(error);
         }
       } else {
-        console.log('else');
         setAddressLine1('');
         setAddressLine2('');
         setCity('');
@@ -112,38 +104,24 @@ export function Checkout() {
       country,
     };
 
-    console.log(obj);
-    console.log(`O email registraso é ${await isRegisteredAddress(user.id)}`);
-
     if ((await isRegisteredAddress(user.id)) == undefined) {
       try {
-        console.log('Executou um Post');
-        const response = await api.post('address/create', obj);
-        console.log(response.data);
+        await api.post('address/create', obj);
         Alert.alert('Alerta', 'Endereço criado com sucesso');
         navigate('Perfil');
       } catch (error: any) {
-        console.log(error);
         Alert.alert('Erro', error.message);
       }
     } else {
       try {
-        console.log('Executou um Put');
-        const response = await api.put('address/update', obj);
-        console.log(response.data);
+        await api.put('address/update', obj);
         Alert.alert('Alerta', 'Endereço alterado com sucesso');
         navigate('Perfil');
       } catch (error: any) {
-        console.log(error);
         Alert.alert('Erro', error.message);
       }
     }
   }
-
-  // useEffect(() => {
-  //   listData();
-  //   console.log(`Os dados de endereço1 é ${addressLine1}`);
-  // }, [isloaded]);
 
   useFocusEffect(
     useCallback(() => {
@@ -152,75 +130,121 @@ export function Checkout() {
   );
 
   return (
-    <KeyboardAvoidingView behavior="height" enabled>
+    <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
+        <ScrollView contentContainerStyle={styles.container}>
           <ContainerUser
             name={user.name}
             photo={user.photo!}
             signOut={signOut}
           />
-          <Header>
-            <Title>Endereço</Title>
-          </Header>
+          <View style={styles.header}>
+            <Text style={styles.title}>Endereço</Text>
+          </View>
 
-          <ContainerForm>
-            <Form>
-              <Label>Linha 1:</Label>
-              <Input
+          <View style={styles.formContainer}>
+            <View style={styles.form}>
+              <Text style={styles.label}>Linha 1:</Text>
+              <TextInput
+                style={styles.input}
                 autoComplete="street-address"
                 placeholder="Rua Funano de tal, 123"
                 value={addressLine1}
-                onChangeText={(text: string) => setAddressLine1(text)}
+                onChangeText={setAddressLine1}
               />
 
-              <Label>Linha 2:</Label>
-              <Input
+              <Text style={styles.label}>Linha 2:</Text>
+              <TextInput
+                style={styles.input}
                 placeholder="Quadra 123, perto de algum lugar"
                 value={addressLine2}
-                onChangeText={(text: string) => setAddressLine2(text)}
+                onChangeText={setAddressLine2}
               />
 
-              <Label>Cidade:</Label>
-              <Input
+              <Text style={styles.label}>Cidade:</Text>
+              <TextInput
+                style={styles.input}
                 placeholder="Sua cidade"
                 value={city}
-                onChangeText={(text: string) => setCity(text)}
+                onChangeText={setCity}
               />
 
-              <Label>Estado:</Label>
-              <Input
+              <Text style={styles.label}>Estado:</Text>
+              <TextInput
+                style={styles.input}
                 value={state}
-                onChangeText={(text: string) => setState(text)}
+                onChangeText={setState}
               />
 
-              <Label>País:</Label>
-              <Input
+              <Text style={styles.label}>País:</Text>
+              <TextInput
+                style={styles.input}
                 value={country}
-                onChangeText={(text: string) => setCountry(text)}
+                onChangeText={setCountry}
               />
 
-              <Label>Cep:</Label>
-              <TextInputMasked
+              <Text style={styles.label}>Cep:</Text>
+              <TextInputMask
+                style={styles.input}
                 autoComplete="postal-address"
                 placeholder="78000-000"
-                type="custom"
+                type={'custom'}
                 options={{ mask: '99999-999' }}
                 value={postalCode}
-                onChangeText={(text) => setPostalCode(text)}
+                onChangeText={setPostalCode}
               />
 
               <Button
                 title="Alterar"
                 light="true"
-                onPress={() => {
-                  handleSaveAddress();
-                }}
+                onPress={handleSaveAddress}
               />
-            </Form>
-          </ContainerForm>
-        </Container>
+            </View>
+          </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    padding: 16,
+  },
+  header: {
+    marginTop: 24,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  formContainer: {
+    flex: 1,
+    marginTop: 16,
+  },
+  form: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    padding: 16,
+    elevation: 2,
+  },
+  label: {
+    fontSize: 16,
+    marginTop: 12,
+    marginBottom: 4,
+    color: '#333',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
+  },
+});

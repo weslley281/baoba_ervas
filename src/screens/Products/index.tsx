@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, FlatList, Modal } from 'react-native';
 //imports
-import theme from '../../global/styles/theme';
 import { api } from '../../services/api';
 import { Container, Form, Header, Input, LoadContainer, Title } from './styles';
 import { CategorySelect } from '../CategorySelect';

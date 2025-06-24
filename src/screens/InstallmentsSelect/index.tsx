@@ -1,16 +1,7 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Button } from '../../components/Button';
 import { installments } from '../../utils/installments';
-import {
-  Installments,
-  Container,
-  Header,
-  Icon,
-  Name,
-  Separator,
-  Title,
-} from './styles';
 
 interface Installment {
   key: string;
@@ -34,25 +25,58 @@ export function InstallmentSelect({
   }
 
   return (
-    <Container>
-      <Header>
-        <Title>Tipo de Entrega</Title>
-      </Header>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Tipo de Entrega</Text>
+      </View>
 
       <FlatList
         data={installments}
         style={{ flex: 1, width: '100%' }}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => (
-          <Installments
+          <TouchableOpacity
             onPress={() => handleInstallmentsSelect(item)}
-            isActive={installment.key === item.key}
+            style={[
+              styles.installment,
+              installment.key === item.key && styles.activeInstallment,
+            ]}
           >
-            <Name>{item.name}</Name>
-          </Installments>
+            <Text style={styles.name}>{item.name}</Text>
+          </TouchableOpacity>
         )}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-    </Container>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 24,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  installment: {
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: '#f2f2f2',
+  },
+  activeInstallment: {
+    backgroundColor: '#cce5ff',
+  },
+  name: {
+    fontSize: 16,
+  },
+  separator: {
+    height: 8,
+  },
+});

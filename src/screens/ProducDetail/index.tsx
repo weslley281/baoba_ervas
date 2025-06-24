@@ -1,25 +1,8 @@
-//libs
 import React, { useContext } from 'react';
-import { Linking, ScrollView } from 'react-native';
+import { Linking, ScrollView, View, Text, Image, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-//imports
 import { ProductsProps } from '../../DTO/ProductsDTO';
-import {
-  Container,
-  ContainerButtonAddOrRemove,
-  ContainerDescriptions,
-  ContainerPrice,
-  Content,
-  Descriptions,
-  Header,
-  HeaderContainer,
-  ImageProduct,
-  Line,
-  Price,
-  Title,
-} from './styles';
 import { CartContext } from '../../contexts/CartContext';
-//components
 import { Button } from '../../components/Button';
 import { CardCart } from '../../components/CardCart';
 import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
@@ -57,32 +40,32 @@ export function ProductDetail() {
   }
 
   return (
-    <Container>
+    <View style={styles.container}>
       <CardCart />
-      <Header>
-        <HeaderContainer>
-          <Title>{product.name}</Title>
-          <ImageProduct source={{ uri: product.image }} />
-        </HeaderContainer>
-      </Header>
+      <View style={styles.header}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>{product.name}</Text>
+          <Image source={{ uri: product.image }} style={styles.imageProduct} />
+        </View>
+      </View>
 
-      <Content>
-        <ContainerPrice>
-          <Price>R$ {price}</Price>
-        </ContainerPrice>
+      <View style={styles.content}>
+        <View style={styles.containerPrice}>
+          <Text style={styles.price}>R$ {price}</Text>
+        </View>
 
-        <Line />
+        <View style={styles.line} />
 
-        <ContainerDescriptions>
+        <View style={styles.containerDescriptions}>
           <ScrollView>
-            <Descriptions>
+            <Text style={styles.descriptions}>
               {product.description
                 ? product.description
                 : 'Haverá aqui um testo que descreverá esse produto, como o seu uso, igredientes e modo de preparo\n'}
-            </Descriptions>
+            </Text>
           </ScrollView>
 
-          <ContainerButtonAddOrRemove>
+          <View style={styles.containerButtonAddOrRemove}>
             <ButtonOrAndRemove
               sizeButton={50}
               sizeIcon={30}
@@ -105,14 +88,79 @@ export function ProductDetail() {
                 );
               }}
             />
-          </ContainerButtonAddOrRemove>
+          </View>
           <Button
             title="Tenho interesse"
             light="true"
             onPress={redirectToWhatsapp}
           />
-        </ContainerDescriptions>
-      </Content>
-    </Container>
+        </View>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    paddingTop: 24,
+    paddingHorizontal: 16,
+    backgroundColor: '#f5f5f5',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    flex: 1,
+    marginRight: 12,
+    color: '#222',
+  },
+  imageProduct: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    backgroundColor: '#eee',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  containerPrice: {
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  price: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#388e3c',
+  },
+  line: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginVertical: 12,
+  },
+  containerDescriptions: {
+    flex: 1,
+    marginBottom: 16,
+  },
+  descriptions: {
+    fontSize: 16,
+    color: '#444',
+    marginBottom: 16,
+  },
+  containerButtonAddOrRemove: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 16,
+  },
+});

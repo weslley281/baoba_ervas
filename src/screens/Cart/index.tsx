@@ -1,47 +1,30 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { TextInputMask } from 'react-native-masked-text';
-import { Button } from '../../components/Button';
-
-import {
+import React, { useContext, useState } from 'react';
+import { 
   Alert,
   Keyboard,
   KeyboardAvoidingView,
   Modal,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+  StyleSheet,
 } from 'react-native';
-
-import {
-  BigInput,
-  Container,
-  ContainerAddOrRemove,
-  ContainerCart,
-  ContainerImage,
-  ContainerProduct,
-  ContainerText,
-  Footer,
-  Form,
-  Header,
-  ImageCart,
-  InputMasckedCard,
-  MeddiemForm,
-  MeddiumInput,
-  SmallForm,
-  TextCart,
-  TextFooter,
-  Title,
-} from './styles';
+import { TextInputMask } from 'react-native-masked-text';
+import { Button } from '../../components/Button';
 import { CartContext } from '../../contexts/CartContext';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
 import { ButtonOrAndRemove } from '../../components/ButtonOrAndRemove';
 import { api } from '../../services/api';
-import { Mask } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { TypeOfDeliverySelect } from '../TypeOfDeliverySelect';
 import { CategorySelectButton } from '../../components/CategorySelectButton';
 
 export function Cart() {
-  const { signOut, user } = useAuth();
+    const { signOut, user } = useAuth();
   const { productsCart, addProductToCart, removeProductToCart } =
     useContext(CartContext);
 
@@ -198,13 +181,13 @@ export function Cart() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container>
+      <View style={styles.container}>
         <ContainerUser name={user.name} photo={user.photo!} signOut={signOut} />
-        <Header>
-          <Title>Meus Produtos</Title>
-        </Header>
+        <View style={styles.header}>
+          <Text style={styles.title}>Meus Produtos</Text>
+        </View>
 
-        <ContainerCart>
+        <ScrollView style={styles.cartContainer}>
           {productsCart.map((product) => {
             const priceFormated = product.value
               .toFixed(2)
@@ -213,17 +196,16 @@ export function Cart() {
             const priceFixed = product.value / product.qtd;
 
             return (
-              <ContainerProduct key={product.id}>
-                <ContainerImage>
-                  <ImageCart source={{ uri: product.photo }} />
-                </ContainerImage>
-
-                <ContainerText>
-                  <TextCart>
+              <View key={product.id} style={styles.productContainer}>
+                <View style={styles.imageContainer}>
+                  <Image source={{ uri: product.photo }} style={styles.imageCart} />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textCart}>
                     {product.name} - {product.qtd} und - R$ {priceFormated}
-                  </TextCart>
-                </ContainerText>
-                <ContainerAddOrRemove>
+                  </Text>
+                </View>
+                <View style={styles.addOrRemoveContainer}>
                   <ButtonOrAndRemove
                     sizeButton={35}
                     sizeIcon={20}
@@ -246,81 +228,86 @@ export function Cart() {
                       handleRemoveToCart(product.id, product.valueFixed);
                     }}
                   />
-                </ContainerAddOrRemove>
-              </ContainerProduct>
+                </View>
+              </View>
             );
           })}
 
-          <Footer>
-            <TextFooter>Quantidade de itens = {totalItems}</TextFooter>
-            <TextFooter>Total ={totalItemsValueFormatted}</TextFooter>
+          <View style={styles.footer}>
+            <Text style={styles.textFooter}>Quantidade de itens = {totalItems}</Text>
+            <Text style={styles.textFooter}>Total = {totalItemsValueFormatted}</Text>
 
-            <Form>
-              <TextFooter>Nome:</TextFooter>
-              <BigInput
-                onChangeText={(text: string) => setName(text)}
+            <View style={styles.form}>
+              <Text style={styles.textFooter}>Nome:</Text>
+              <TextInput
+                style={styles.bigInput}
+                onChangeText={setName}
                 value={name}
                 placeholder="fulano de tal"
               />
 
-              <TextFooter>Numero do Cartão:</TextFooter>
-              <InputMasckedCard
+              <Text style={styles.textFooter}>Numero do Cartão:</Text>
+              <TextInputMask
+                style={styles.inputMaskedCard}
                 type={'credit-card'}
                 placeholder="4242 4242 4242 4242"
-                onChangeText={(text) => handleCardNumberChange(text)}
+                onChangeText={handleCardNumberChange}
               />
 
-              <MeddiemForm>
-                <SmallForm>
-                  <TextFooter>Data:</TextFooter>
-                  <MeddiumInput
+              <View style={styles.mediumForm}>
+                <View style={styles.smallForm}>
+                  <Text style={styles.textFooter}>Data:</Text>
+                  <TextInputMask
+                    style={styles.mediumInput}
                     type="custom"
                     options={{ mask: '99/99' }}
-                    onChangeText={(text) => changeDate(text)}
+                    onChangeText={changeDate}
                     placeholder="12/24"
                   />
-                </SmallForm>
-                <SmallForm>
-                  <TextFooter>Cvc:</TextFooter>
-                  <MeddiumInput
+                </View>
+                <View style={styles.smallForm}>
+                  <Text style={styles.textFooter}>Cvc:</Text>
+                  <TextInputMask
+                    style={styles.mediumInput}
                     type="custom"
                     options={{ mask: '999' }}
                     onChangeText={(text) => setCvc(Number(text))}
                     maxLength={16}
                     placeholder="123"
                   />
-                </SmallForm>
-              </MeddiemForm>
+                </View>
+              </View>
 
-              <TextFooter>Cpf:</TextFooter>
-              <InputMasckedCard
+              <Text style={styles.textFooter}>Cpf:</Text>
+              <TextInputMask
+                style={styles.inputMaskedCard}
                 type="cpf"
-                onChangeText={(text) => handleCpf(text)}
+                onChangeText={handleCpf}
                 maxLength={16}
                 placeholder="000.000.000-00"
               />
 
-              <TextFooter>Numero de Parcelas:</TextFooter>
-              <BigInput
-                onChangeText={(text: string) => setInstallments(Number(text))}
+              <Text style={styles.textFooter}>Numero de Parcelas:</Text>
+              <TextInput
+                style={styles.bigInput}
+                onChangeText={(text) => setInstallments(Number(text))}
                 placeholder=""
+                keyboardType="numeric"
               />
 
               <CategorySelectButton
                 onPress={handleOpenSelectTypeOfDeliveryModal}
                 title={type_delivery.name}
               />
-            </Form>
+            </View>
 
             <Button
               title="Comprar"
               light="true"
-              onPress={() => {
-                handlePayment();
-              }}
+              onPress={handlePayment}
             />
-          </Footer>
-        </ContainerCart>
+          </View>
+        </ScrollView>
 
         <Modal visible={installmentModalOpen}>
           <TypeOfDeliverySelect
@@ -337,7 +324,29 @@ export function Cart() {
             closeSelectTypeOfDelivery={handleCloseSelectTypeOfDeliveryModal}
           />
         </Modal>
-      </Container>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
+  header: { padding: 16, backgroundColor: '#f5f5f5' },
+  title: { fontSize: 22, fontWeight: 'bold' },
+  cartContainer: { flex: 1, padding: 16 },
+  productContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  imageContainer: { marginRight: 8 },
+  imageCart: { width: 60, height: 60, borderRadius: 8 },
+  textContainer: { flex: 1 },
+  textCart: { fontSize: 16 },
+  addOrRemoveContainer: { flexDirection: 'row', alignItems: 'center' },
+  footer: { marginTop: 16 },
+  textFooter: { fontSize: 16, marginVertical: 4 },
+  form: { marginTop: 16 },
+  bigInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, padding: 8, marginBottom: 8 },
+  inputMaskedCard: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, padding: 8, marginBottom: 8 },
+  mediumForm: { flexDirection: 'row', justifyContent: 'space-between' },
+  smallForm: { flex: 1, marginRight: 8 },
+  mediumInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, padding: 8, marginBottom: 8 },
+});
+

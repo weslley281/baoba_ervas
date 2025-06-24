@@ -1,20 +1,13 @@
 import React from 'react';
-import { FlatList } from 'react-native';
-import { Button } from '../../components/Button';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { categories } from '../../utils/categories';
-import {
-  Category,
-  Container,
-  Header,
-  Icon,
-  Name,
-  Separator,
-  Title,
-} from './styles';
+import { Button } from '../../components/Button';
+import { Feather } from '@expo/vector-icons';
 
 interface Category {
   key: string;
   name: string;
+  icon: string;
 }
 interface Props {
   category: Category;
@@ -22,6 +15,7 @@ interface Props {
   setSearchText: any;
   closeSelectCategory: () => void;
 }
+
 export function CategorySelect({
   category,
   setCategory,
@@ -35,26 +29,66 @@ export function CategorySelect({
   }
 
   return (
-    <Container>
-      <Header>
-        <Title>Categoria</Title>
-      </Header>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Categoria</Text>
+      </View>
 
       <FlatList
         data={categories}
         style={{ flex: 1, width: '100%' }}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => (
-          <Category
+          <TouchableOpacity
+            style={[
+              styles.category,
+              category.key === item.key && styles.activeCategory,
+            ]}
             onPress={() => handleCategorySelect(item)}
-            isActive={category.key === item.key}
           >
-            <Icon name={item.icon} />
-            <Name>{item.name}</Name>
-          </Category>
+            <Feather size={24} style={styles.icon} />
+            <Text style={styles.name}>{item.name}</Text>
+          </TouchableOpacity>
         )}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-    </Container>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  category: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  activeCategory: {
+    backgroundColor: '#e6e6e6',
+  },
+  icon: {
+    marginRight: 16,
+  },
+  name: {
+    fontSize: 16,
+  },
+  separator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#eee',
+  },
+});

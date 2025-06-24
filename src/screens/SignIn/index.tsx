@@ -5,16 +5,17 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  Image,
+  StyleSheet,
 } from 'react-native';
-import { Container, ContainerLogo, Form, Header, Logo, Title } from './styles';
-import { useTheme } from 'styled-components';
 import { useAuth } from '../../hooks/auth';
 import { ButtonWithGoogleIcon } from '../../components/ButtonWithGoogleIcon';
 
 export function SignIn() {
-  const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
-  const { signInWithGoogle, signInWithApple } = useAuth();
+  const { signInWithGoogle } = useAuth();
 
   async function handleSignInWithGoogle() {
     try {
@@ -28,32 +29,69 @@ export function SignIn() {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" enabled>
+    <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <Header>
-            <ContainerLogo>
-              <Logo source={require('../../images/logo_baoba.png')} />
-            </ContainerLogo>
-            <Title>Faça o seu cadastro ou entre com sua conta Google</Title>
-          </Header>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../images/logo_baoba.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </View>
+            <Text style={styles.title}>
+              Faça o seu cadastro ou entre com sua conta Google
+            </Text>
+          </View>
 
-          <Form>
+          <View style={styles.form}>
             <ButtonWithGoogleIcon
               title="Login com o Google"
               onPress={handleSignInWithGoogle}
             />
-          </Form>
+          </View>
 
           {isLoading && (
             <ActivityIndicator
-              color={theme.colors.primary_light}
+              color="#6C63FF"
               size="large"
               style={{ marginTop: 18 }}
             />
           )}
-        </Container>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+  },
+  title: {
+    fontSize: 20,
+    color: '#333',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  form: {
+    marginTop: 24,
+    alignItems: 'center',
+  },
+});
