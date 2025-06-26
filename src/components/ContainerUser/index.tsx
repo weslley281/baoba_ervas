@@ -1,18 +1,6 @@
 import React from 'react';
-
-import {
-  Container,
-  Header,
-  Icon,
-  LogoutButton,
-  Photo,
-  Title,
-  User,
-  UserGreeting,
-  UserInfo,
-  UserName,
-  UserWrapper,
-} from './styles';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 interface Props {
   name: string;
@@ -22,24 +10,64 @@ interface Props {
 
 export function ContainerUser({ name, photo, signOut }: Props) {
   return (
-    <Header>
-      <UserWrapper>
-        <UserInfo>
-          <Photo
-            source={{
-              uri: photo,
-            }}
+    <View style={styles.header}>
+      <View style={styles.userWrapper}>
+        <View style={styles.userInfo}>
+          <Image
+            source={{ uri: photo }}
+            style={styles.photo}
           />
-          <User>
-            <UserGreeting>Olá, </UserGreeting>
-            <UserName>{name}</UserName>
-          </User>
-        </UserInfo>
-
-        <LogoutButton onPress={signOut}>
-          <Icon name="log-out" />
-        </LogoutButton>
-      </UserWrapper>
-    </Header>
+          <View style={styles.user}>
+            <Text style={styles.userGreeting}>Olá, </Text>
+            <Text style={styles.userName}>{name}</Text>
+          </View>
+        </View>
+        <TouchableOpacity onPress={signOut} style={styles.logoutButton}>
+          <Feather name="log-out" size={24} color="#000" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    width: '100%',
+    padding: 24,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  photo: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 16,
+  },
+  user: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userGreeting: {
+    fontSize: 16,
+    color: '#666',
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  logoutButton: {
+    padding: 8,
+  },
+});

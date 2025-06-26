@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -6,32 +6,20 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
 } from 'react-native';
 import { Button } from '../../components/Button';
-
-import {
-  Container,
-  ContainerButton,
-  Form,
-  Header,
-  Input,
-  TextInputMasked,
-  Title,
-  Text,
-  ContainerInformations,
-} from './styles';
-
 import { api } from '../../services/api';
 import { useAuth } from '../../hooks/auth';
 import { ContainerUser } from '../../components/ContainerUser';
-import { useTheme } from 'styled-components';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { LoadContainer } from '../Products/styles';
+import { useNavigation } from '@react-navigation/native';
 import { ButtonWithIcon } from '../../components/ButtonWithIcon';
 
 export function Profile() {
   const { signOut, user } = useAuth();
-  const theme = useTheme();
   const { navigate } = useNavigation<any>();
   const [client_id, setClient_id] = useState(user.id);
   const [date, setDate] = useState('');
@@ -39,7 +27,7 @@ export function Profile() {
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.fullName);
   const [birthday, setBirthday] = useState('');
-  const [dateMoment, setDateMoment] = useState();
+  const [dateMoment, setDateMoment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [changes, setChanges] = useState(false);
 
@@ -58,7 +46,6 @@ export function Profile() {
       if ((await isRegisteredEmail(user.email)) > 0) {
         try {
           const response = await api.get(`clients/email/${user.email}`);
-
           setPhone(response.data.phone);
           setName(response.data.name);
           setEmail(response.data.email);
@@ -150,96 +137,81 @@ export function Profile() {
     listData();
   }, []);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     listData();
-  //   }, [])
-  // );
-
   return (
-    <KeyboardAvoidingView behavior="height" enabled>
+    <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
-          <Container>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
             <ContainerUser
               name={user.name}
               photo={user.photo!}
               signOut={signOut}
             />
-            <Header>
-              <Title>Meus Dados</Title>
-            </Header>
+            <View style={styles.header}>
+              <Text style={styles.title}>Meus Dados</Text>
+            </View>
 
             {isLoading ? (
-              <LoadContainer>
-                <ActivityIndicator size="large" color={theme.colors.primary} />
-              </LoadContainer>
+              <View style={styles.loadContainer}>
+                <ActivityIndicator size="large" color={"blue"} />
+              </View>
             ) : changes ? (
-              <Form>
-                <Input
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.input}
                   autoComplete="name"
                   placeholder="Nome Completo"
                   value={name}
-                  onChangeText={(text: string) => setName(text)}
+                  onChangeText={setName}
                 />
 
-                <TextInputMasked
+                <TextInput
+                  style={styles.input}
                   autoComplete="tel"
                   placeholder="Telefone"
-                  type={'cel-phone'}
-                  options={{
-                    maskType: 'BRL',
-                    withDDD: true,
-                    dddMask: '(99) ',
-                  }}
                   value={phone}
-                  onChangeText={(text) => setPhone(text)}
+                  onChangeText={setPhone}
+                  keyboardType="phone-pad"
                 />
 
-                <TextInputMasked
+                <TextInput
+                  style={styles.input}
                   autoComplete="birthdate-full"
                   placeholder="Data de Aniversário"
-                  type={'datetime'}
-                  options={{
-                    format: 'DD/MM/YYYY',
-                  }}
                   value={dateMoment}
-                  onChangeText={(text) => setDate(text)}
+                  onChangeText={setDate}
                 />
 
-                <Input
+                <TextInput
+                  style={styles.input}
                   autoComplete="email"
                   placeholder="Email"
                   autoCapitalize="none"
                   value={email}
-                  onChangeText={(text: string) => setEmail(text)}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
                 />
 
                 <Button
-                  title="Salvar0"
+                  title="Salvar"
                   light="true"
-                  onPress={() => {
-                    handleRegister();
-                  }}
+                  onPress={handleRegister}
                 />
 
                 <Button
-                  color={theme.colors.danger}
+                  color={"red"}
                   title="Cancelar"
                   light="true"
-                  onPress={() => {
-                    setChanges(false);
-                  }}
+                  onPress={() => setChanges(false)}
                 />
-              </Form>
+              </View>
             ) : (
-              <Form>
-                <ContainerButton>
+              <View style={styles.form}>
+                <View style={styles.containerButton}>
                   <ButtonWithIcon
                     icon="user-edit"
                     onPress={() => setChanges(true)}
                   />
-
                   <ButtonWithIcon
                     icon="address-book"
                     onPress={() => navigate('Checkout')}
@@ -248,19 +220,71 @@ export function Profile() {
                     icon="box"
                     onPress={() => navigate('Orders')}
                   />
-                </ContainerButton>
-
-                <ContainerInformations>
-                  <Text>Nome: {name}</Text>
-                  <Text>Telefone: {phone}</Text>
-                  <Text>Aniversário: {birthday}</Text>
-                  <Text>Email: {email}</Text>
-                </ContainerInformations>
-              </Form>
+                </View>
+                <View style={styles.containerInformations}>
+                  <Text style={styles.infoText}>Nome: {name}</Text>
+                  <Text style={styles.infoText}>Telefone: {phone}</Text>
+                  <Text style={styles.infoText}>Aniversário: {birthday}</Text>
+                  <Text style={styles.infoText}>Email: {email}</Text>
+                </View>
+              </View>
             )}
-          </Container>
+          </View>
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginTop: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  loadContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 32,
+  },
+  form: {
+    marginTop: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+    fontSize: 16,
+    backgroundColor: '#fafafa',
+  },
+  containerButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  containerInformations: {
+    marginTop: 16,
+    padding: 12,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+  },
+  infoText: {
+    fontSize: 16,
+    marginBottom: 6,
+  },
+});
