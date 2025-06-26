@@ -1,5 +1,4 @@
 import React from 'react';
-import theme from './src/global/styles/theme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider, useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';

@@ -20,13 +20,15 @@ export function SignIn() {
   async function handleSignInWithGoogle() {
     try {
       setIsLoading(true);
-      return await signInWithGoogle();
+      await signInWithGoogle();
     } catch (error) {
       console.log(error);
-      Alert.alert('Não foi possível conectar a conta Google');
+      Alert.alert('Erro', 'Não foi possível conectar com a conta Google');
+    } finally {
       setIsLoading(false);
     }
   }
+  
 
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>

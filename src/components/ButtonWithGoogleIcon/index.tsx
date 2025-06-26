@@ -9,9 +9,9 @@ interface Props extends TouchableOpacityProps {
 
 export function ButtonWithGoogleIcon({ onPress, title, ...rest }: Props) {
   return (
-    <TouchableOpacity onPress={onPress} {...rest}>
+    <TouchableOpacity style={styles.button} onPress={onPress} {...rest}>
       <AntDesign name="google" size={24} color="black" />
-      <Text>{title}</Text>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }

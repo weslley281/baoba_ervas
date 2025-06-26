@@ -1,159 +1,110 @@
+// hooks/useAuth.ts
 import React, {
   createContext,
-  ReactNode,
   useContext,
-  useState,
   useEffect,
+  useState,
+  ReactNode,
 } from 'react';
-
-import * as AuthSession from 'expo-auth-session';
-import * as AppleAuthentication from 'expo-apple-authentication';
+import * as WebBrowser from 'expo-web-browser';
+import {
+  useAuthRequest,
+  makeRedirectUri,
+  exchangeCodeAsync,
+  TokenResponse,
+} from 'expo-auth-session';
+import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+WebBrowser.maybeCompleteAuthSession();
 
 interface User {
   id: string;
   name: string;
-  fullName?: string;
   email: string;
   photo?: string;
 }
 
-interface IAuthContextData {
-  user: User;
+interface AuthContextData {
+  user: User | null;
   signInWithGoogle: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
   signOut: () => Promise<void>;
-  userStorageLoading: boolean;
+  loading: boolean;
 }
 
-interface AuthorizationResponse {
-  params: {
-    access_token: string;
-  };
-  type: string;
-}
+const AuthContext = createContext({} as AuthContextData);
+const USER_STORAGE_KEY = '@baobaervas:user';
 
-const AuthContext = createContext({} as IAuthContextData);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>({} as User);
-  const [userStorageLoading, setUserStorageLoading] = useState(true);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: '778843493797-en06e73ab4k4jgoh8f5kjbuous23ab17.apps.googleusercontent.com',
+    redirectUri: makeRedirectUri({
+      native: 'com.baoba_ervas:/oauthredirect', // ajuste se usar build nativo
+    }),
+    scopes: ['profile', 'email'],
+  });
 
-  const userStorageKey = '@baobaervas:user';
+  useEffect(() => {
+    if (response?.type === 'success' && response.authentication?.accessToken) {
+      fetchUserInfo(response.authentication.accessToken);
+    }
+  }, [response]);
 
-  async function signInWithGoogle() {
+  async function fetchUserInfo(token: string) {
     try {
-      const REDIRECT_URI = 'https://auth.expo.io/@weslley.ferraz/baoba_ervas';
-      const CLIENT_ID =
-        '778843493797-en06e73ab4k4jgoh8f5kjbuous23ab17.apps.googleusercontent.com';
-      const RESPONSE_TYPE = 'token';
-      const SCOPE = encodeURI('profile email');
+      const res = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
+      );
+      const userInfo = await res.json();
 
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
+      const userLogged: User = {
+        id: userInfo.id,
+        name: userInfo.given_name,
+        email: userInfo.email,
+        photo:
+          userInfo.picture ??
+          `https://ui-avatars.com/api/?name=${userInfo.given_name}&length=1`,
+      };
 
-      const { params, type } = (await AuthSession.startAsync({
-        authUrl,
-      })) as AuthorizationResponse;
-
-      if (type === 'success') {
-        const response = await fetch(
-          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
-        );
-        const userInfo = await response.json();
-
-        const name = userInfo.given_name;
-        const photo = userInfo.picture
-          ? userInfo.picture
-          : `https://ui-avatars.com/api/?name=${name}&lenght=1`;
-
-        const userLogged = {
-          id: userInfo.id,
-          email: userInfo.email,
-          fullName: userInfo.name,
-          name,
-          photo,
-        };
-
-        console.log(userInfo);
-
-        setUser(userLogged);
-        await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
-      }
-    } catch (err) {
-      throw new Error(String(err));
+      setUser(userLogged);
+      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userLogged));
+    } catch (error) {
+      console.error('Erro ao buscar dados do usuário:', error);
     }
   }
 
-  async function signInWithApple() {
-    try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [
-          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
-      });
-
-      if (credential) {
-        const name = credential.fullName?.givenName!;
-        const photo = `https://ui-avatars.com/api/?name=${name}&lenght=1&bold=true`;
-
-        const userLogged = {
-          id: String(credential.user),
-          email: credential.email!,
-          name,
-          photo,
-        };
-
-        setUser(userLogged);
-        await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
-      }
-    } catch (err) {
-      throw new Error(String(err));
-    }
+  async function signInWithGoogle() {
+    await promptAsync();
   }
 
   async function signOut() {
-    setUser({} as User);
-    await AsyncStorage.removeItem(userStorageKey);
+    setUser(null);
+    await AsyncStorage.removeItem(USER_STORAGE_KEY);
   }
 
   useEffect(() => {
-    async function loadUserStorageData() {
-      const userStoraged = await AsyncStorage.getItem(userStorageKey);
-
-      if (userStoraged) {
-        const userLogged = JSON.parse(userStoraged) as User;
-        setUser(userLogged);
+    async function loadStorageUser() {
+      const storaged = await AsyncStorage.getItem(USER_STORAGE_KEY);
+      if (storaged) {
+        setUser(JSON.parse(storaged));
       }
-
-      setUserStorageLoading(false);
+      setLoading(false);
     }
-
-    loadUserStorageData();
+    loadStorageUser();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        signInWithGoogle,
-        signInWithApple,
-        signOut,
-        userStorageLoading,
-      }}
+      value={{ user, signInWithGoogle, signOut, loading }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
 
-function useAuth() {
-  const context = useContext(AuthContext);
-  return context;
+export function useAuth() {
+  return useContext(AuthContext);
 }
-
-export { AuthProvider, useAuth };
